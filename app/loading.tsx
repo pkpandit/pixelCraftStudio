@@ -20,7 +20,7 @@ export default function Loading() {
 
           {/* Center Brand Badge */}
           <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#4F46E5] to-[#7C3AED] font-black text-white text-base shadow-md shadow-indigo-500/25 ring-1 ring-white/20 dark:from-[#6366F1] dark:via-[#8B5CF6] dark:to-[#EC4899]">
-            <span className="font-heading">PU</span>
+            <span className="font-heading">PCS</span>
           </div>
         </div>
 

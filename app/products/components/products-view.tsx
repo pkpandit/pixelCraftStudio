@@ -13,7 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { ProductCard } from "@/components/shared/product-card";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import {
+  ScrollReveal,
+  ScrollRevealContainer,
+  ScrollRevealItem,
+} from "@/components/ui/ScrollReveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 export interface ProductsViewProps {
@@ -25,11 +29,18 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
   const initialCategoryParam = searchParams.get("cat");
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [prevCatParam, setPrevCatParam] = useState(initialCategoryParam);
   const [selectedCategory, setSelectedCategory] = useState<string>(
     initialCategoryParam
       ? PRODUCT_CATEGORIES.find((c) => c.id === initialCategoryParam)?.category || "All"
       : "All"
   );
+
+  if (initialCategoryParam !== prevCatParam) {
+    setPrevCatParam(initialCategoryParam);
+    const matched = PRODUCT_CATEGORIES.find((c) => c.id === initialCategoryParam);
+    setSelectedCategory(matched?.category || "All");
+  }
 
   const categories = ["All", ...PRODUCT_CATEGORIES.map((c) => c.category)];
 
@@ -66,14 +77,17 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
                 <span>Digital Products Catalog</span>
               </div>
 
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
-                <span className="block">Ready-to-Use Digital Products</span>
-                <span className="block">
-                  <span className="gradient-text">
-                    for Your Next Project.
+              <div className="space-y-4">
+                <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
+                  <span className="block">Ready-to-Use Digital Products</span>
+                  <span className="block">
+                    <span className="gradient-text">
+                      for Your Next Project.
+                    </span>
                   </span>
-                </span>
-              </h1>
+                </h1>
+                <div className="agency-heading-bar mx-auto" />
+              </div>
 
               <p className="font-sans text-base sm:text-lg lg:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed sm:leading-[1.7] max-w-2xl sm:max-w-3xl mx-auto text-balance font-normal">
                 Save time and bring your ideas to life with professionally crafted digital products. Explore practical resources designed for developers, designers, startups, and businesses.
@@ -127,13 +141,19 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
               </div>
 
               {/* Category Pill Tabs with edge-to-edge mobile scroll */}
-              <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-2 scrollbar-none pt-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div
+                role="tablist"
+                aria-label="Filter products by category"
+                className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-2 scrollbar-none pt-1 -mx-4 px-4 sm:mx-0 sm:px-0"
+              >
                 {categories.map((cat) => {
                   const isSelected = selectedCategory === cat;
                   return (
                     <button
                       key={cat}
                       type="button"
+                      role="tab"
+                      aria-selected={isSelected}
                       onClick={() => setSelectedCategory(cat)}
                       className={`shrink-0 rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold transition-all duration-300 select-none cursor-pointer ${
                         isSelected
@@ -152,11 +172,12 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
       </section>
 
       {/* Products Grid */}
-      <section className="py-20 sm:py-28 bg-[#F8FAFC] dark:bg-[#09090B]">
+      <section className="py-24 sm:py-36 bg-[#F8FAFC] dark:bg-[#0B0B0F] border-b border-[#E4E4E7] dark:border-white/[0.08]">
         <Container>
           <div className="mb-14">
             <ScrollReveal animation="fade-up">
               <SectionHeading
+                eyebrow="All Resources"
                 title="Premium Digital Products"
                 description="Website templates, UI kits, and design assets built for modern businesses."
               />
@@ -165,7 +186,7 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
 
           {filteredProducts.length === 0 ? (
             <ScrollReveal animation="fade" delay={0.1}>
-              <Card className="py-24 text-center space-y-5 border-dashed border-[#E4E4E7] dark:border-white/10 p-8 max-w-lg mx-auto">
+              <Card className="py-24 text-center space-y-5 border-dashed border-[#E4E4E7] dark:border-white/10 p-8 max-w-lg mx-auto rounded-[20px]">
                 <Package className="h-14 w-14 text-[#71717A] mx-auto" />
                 <h3 className="font-heading text-xl font-bold text-[#0A0A0A] dark:text-white">
                   No products found
@@ -180,40 +201,43 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
                     setSearchQuery("");
                     setSelectedCategory("All");
                   }}
+                  className="rounded-full font-bold"
                 >
                   Reset Filters
                 </Button>
               </Card>
             </ScrollReveal>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredProducts.map((product, index) => (
-                <ScrollReveal
+            <ScrollRevealContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredProducts.map((product) => (
+                <ScrollRevealItem
                   key={product.id}
                   animation="fade-up"
-                  delay={Math.min(index * 100, 400)}
                   className="flex flex-col h-full w-full"
                 >
                   <ProductCard product={product} />
-                </ScrollReveal>
+                </ScrollRevealItem>
               ))}
-            </div>
+            </ScrollRevealContainer>
           )}
         </Container>
       </section>
 
       {/* Custom Project Callout */}
-      <section className="pt-8 pb-24 sm:pb-36">
+      <section className="py-24 sm:py-36 bg-white dark:bg-[#09090B] border-b border-[#E4E4E7] dark:border-white/[0.08]">
         <Container>
           <ScrollReveal animation="fade-up" delay={0.2}>
-            <Card className="p-6 sm:p-12 lg:p-16 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#16161E] dark:to-[#0F0F14] shadow-lg dark:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)]">
+            <Card className="p-6 sm:p-12 lg:p-16 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#16161E] dark:to-[#0F0F14] shadow-lg dark:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)] rounded-[20px]">
               <div className="max-w-2xl space-y-5 text-center sm:text-left">
-                <span className="text-xs font-bold tracking-widest text-[#4F46E5] dark:text-[#C084FC] uppercase">
+                <span className="agency-eyebrow">
                   Need Something Custom?
                 </span>
-                <h3 className="font-heading text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
-                  Don’t See Exactly What You Need?
-                </h3>
+                <div className="space-y-3">
+                  <h3 className="font-heading text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
+                    Don’t See Exactly What You Need?
+                  </h3>
+                  <div className="agency-heading-bar ml-0 mr-auto sm:ml-0" />
+                </div>
                 <p className="text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
                   I also build custom websites, tailored web applications, and dedicated design systems built specifically around your brand and business requirements.
                 </p>
@@ -221,7 +245,7 @@ export function ProductsView({ className = "" }: ProductsViewProps) {
                   <Button
                     href="/contact"
                     size="lg"
-                    className="w-full sm:w-auto rounded-full px-8 py-6 font-bold shadow-lg shadow-indigo-500/25"
+                    className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold shadow-lg shadow-indigo-500/25"
                     rightIcon={<ArrowRight className="h-4 w-4" />}
                   >
                     Discuss a Custom Project

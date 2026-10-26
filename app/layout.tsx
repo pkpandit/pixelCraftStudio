@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
@@ -17,44 +17,39 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://pramodupadhyay.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://pixelcraftstudio.com"),
   title: {
-    default: "Pramod Upadhyay | Full Stack Developer & UI Designer",
-    template: "%s | Pramod Upadhyay",
+    default: "pixelCraftStudio | Digital Products & Web Development Studio",
+    template: "%s | pixelCraftStudio",
   },
   description:
-    "Portfolio, digital products, and bespoke web development services by Pramod Upadhyay. Crafting high-performance Next.js applications and modern design systems.",
+    "Digital products, website templates, and bespoke web development services by pixelCraftStudio. Crafting high-performance Next.js applications and modern design systems.",
   keywords: [
-    "Pramod Upadhyay",
-    "Full Stack Developer",
+    "pixelCraftStudio",
+    "Web Development Studio",
     "UI Designer",
     "Next.js Developer",
     "React Templates",
     "Digital Products",
+    "Figma UI Kits",
   ],
-  authors: [{ name: "Pramod Upadhyay" }],
-  creator: "Pramod Upadhyay",
+  authors: [{ name: "pixelCraftStudio" }],
+  creator: "pixelCraftStudio",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://pramodupadhyay.com",
-    siteName: "Pramod Upadhyay Studio",
-    title: "Pramod Upadhyay | Full Stack Developer & UI Designer",
+    url: "https://pixelcraftstudio.com",
+    siteName: "pixelCraftStudio",
+    title: "pixelCraftStudio | Digital Products & Web Development Studio",
     description:
-      "Portfolio, digital products, and bespoke web development services by Pramod Upadhyay. Crafting high-performance Next.js applications and modern design systems.",
+      "Digital products, website templates, and bespoke web development services by pixelCraftStudio. Crafting high-performance Next.js applications and modern design systems.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pramod Upadhyay | Full Stack Developer & UI Designer",
+    title: "pixelCraftStudio | Digital Products & Web Development Studio",
     description:
-      "Portfolio, digital products, and bespoke web development services by Pramod Upadhyay.",
+      "Digital products, website templates, and bespoke web development services by pixelCraftStudio.",
   },
   robots: {
     index: true,
@@ -70,9 +65,61 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${plusJakartaSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+      className={`${inter.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/20 selection:text-primary overflow-x-hidden">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (theme === 'dark' || (!theme && prefersDark)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://pixelcraftstudio.com/#organization",
+                  name: "pixelCraftStudio",
+                  url: "https://pixelcraftstudio.com",
+                  logo: "https://pixelcraftstudio.com/favicon.ico",
+                  sameAs: [
+                    "https://github.com",
+                    "https://linkedin.com",
+                    "https://dribbble.com",
+                  ],
+                  description:
+                    "Digital products, website templates, and bespoke web development services by pixelCraftStudio.",
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://pixelcraftstudio.com/#website",
+                  url: "https://pixelcraftstudio.com",
+                  name: "pixelCraftStudio",
+                  publisher: {
+                    "@id": "https://pixelcraftstudio.com/#organization",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/20 selection:text-primary overflow-x-clip">
         {/* WCAG 2.1 AA Compliant Skip to Content Link */}
         <a
           href="#main-content"
@@ -81,7 +128,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <Navbar />
-        <main id="main-content" className="flex-1 w-full overflow-x-hidden">
+        <main id="main-content" className="flex-1 w-full pt-16 sm:pt-20">
           {children}
         </main>
         <Footer />

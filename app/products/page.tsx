@@ -4,7 +4,7 @@ import { ProductsView } from "./components/products-view";
 import ProductsLoading from "./loading";
 
 export const metadata: Metadata = {
-  title: "Digital Products & Templates Catalog | Pramod Upadhyay",
+  title: "Digital Products & Templates Catalog | pixelCraftStudio",
   description:
     "Explore production-ready Next.js website templates, admin dashboard kits, and Figma UI systems built for developers, startups, and creative agencies.",
   keywords: [
@@ -14,13 +14,16 @@ export const metadata: Metadata = {
     "Admin Dashboard Templates",
     "React Templates",
     "Website Templates",
-    "Pramod Upadhyay",
+    "pixelCraftStudio",
   ],
   openGraph: {
-    title: "Digital Products & Templates Catalog | Pramod Upadhyay",
+    title: "Digital Products & Templates Catalog | pixelCraftStudio",
     description:
       "Explore production-ready Next.js website templates, admin dashboard kits, and Figma UI systems built for developers, startups, and creative agencies.",
     type: "website",
+  },
+  alternates: {
+    canonical: "/products",
   },
 };
 

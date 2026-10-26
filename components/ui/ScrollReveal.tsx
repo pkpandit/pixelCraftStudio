@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * Supported animation variants.
- * All movement variants strictly respect the 24px maximum translate distance requirement.
+ * All movement variants strictly respect subtle 16px maximum translate distance
+ * and animate exclusively opacity and transform to eliminate layout thrashing.
  */
 export type ScrollRevealAnimation =
   | "fade"
@@ -44,23 +45,23 @@ export interface ScrollRevealProps extends React.HTMLAttributes<HTMLElement> {
   animation?: ScrollRevealAnimation;
   /**
    * Delay before animation starts (in seconds or ms).
-   * E.g. 0.1 or 100 for 100ms. Capped at 0.4s (400ms) maximum.
+   * E.g. 0.1 or 100 for 100ms. Capped at 0.35s (350ms) maximum.
    */
   delay?: number;
-  /** Animation duration in seconds (default: 0.6) */
+  /** Animation duration in seconds (default: 0.45 for snappy, professional feel) */
   duration?: number;
-  /** Additional CSS classes (avoids layout shifts by applying styles to the motion wrapper) */
+  /** Additional CSS classes */
   className?: string;
   /** HTML element type to render (default: "div") */
   as?: ScrollRevealAs;
   /**
    * Optional zero-based index for grid cards to automatically calculate staggered delay:
-   * 0 -> 0ms, 1 -> 100ms, 2 -> 200ms, 3 -> 300ms, 4+ -> 400ms max.
+   * 0 -> 0ms, 1 -> 80ms, 2 -> 160ms, 3 -> 240ms, 4+ -> 320ms max.
    */
   staggerIndex?: number;
   /** Optional stagger delay for children inside a container (in seconds) */
   staggerChildren?: number;
-  /** Portion of the element that must be visible before triggering (default: 0.2) */
+  /** Portion of the element that must be visible before triggering (default: "some") */
   amount?: number | "some" | "all";
   /** Whether the animation runs only once when entering view (default: true) */
   once?: boolean;
@@ -91,19 +92,15 @@ const SMOOTH_EASING = [0.21, 0.47, 0.32, 0.98] as const;
 
 /**
  * Helper to calculate staggered delay in seconds from an item index.
- * - Card 1 (index 0): 0.0s (0ms)
- * - Card 2 (index 1): 0.1s (100ms)
- * - Card 3 (index 2): 0.2s (200ms)
- * - Card 4 (index 3): 0.3s (300ms)
- * - Maximum delay capped at 0.4s (400ms)
+ * Capped at 0.32s (320ms) max for snappy responsiveness.
  */
 export function getStaggerDelay(index: number): number {
-  return Math.min(Math.max(0, index) * 0.1, 0.4);
+  return Math.min(Math.max(0, index) * 0.08, 0.32);
 }
 
 /**
  * Builds Framer Motion variants according to the requested animation type.
- * Movement distance is strictly limited to 24px to prevent jarring transitions.
+ * Movement distance is strictly limited to 16px to prevent jarring transitions or overflow.
  */
 function createVariants(
   animation: ScrollRevealAnimation,
@@ -117,7 +114,7 @@ function createVariants(
       visible: {
         opacity: 1,
         transition: {
-          duration: 0.2,
+          duration: 0.15,
           ...(staggerChildren ? { staggerChildren } : {}),
         },
       },
@@ -129,30 +126,27 @@ function createVariants(
 
   switch (animation) {
     case "fade-up":
-      baseHidden.y = 24;
+      baseHidden.y = 16;
       baseVisible.y = 0;
       break;
     case "fade-down":
-      baseHidden.y = -24;
+      baseHidden.y = -16;
       baseVisible.y = 0;
       break;
     case "fade-left":
-      // Drift into place from the right (moving leftward)
-      baseHidden.x = 24;
+      baseHidden.x = 16;
       baseVisible.x = 0;
       break;
     case "fade-right":
-      // Drift into place from the left (moving rightward)
-      baseHidden.x = -24;
+      baseHidden.x = -16;
       baseVisible.x = 0;
       break;
     case "zoom-in":
-      baseHidden.scale = 0.95;
+      baseHidden.scale = 0.98;
       baseVisible.scale = 1;
       break;
     case "fade":
     default:
-      // Opacity only
       break;
   }
 
@@ -166,24 +160,24 @@ function createVariants(
 }
 
 /**
- * ScrollReveal: Reusable scroll-triggered reveal animation component
+ * ScrollReveal: Reusable, high-performance scroll-triggered reveal animation component.
  * Built with Next.js App Router, Framer Motion, and Tailwind CSS.
  *
- * - Zero layout shift (preserves element display and box models)
- * - Works identically in both light and dark modes
+ * - Zero layout shift (preserves element display and box models; animates only transform & opacity)
+ * - Strict 16px displacement for subtle, high-end agency aesthetic
  * - Strictly respects prefers-reduced-motion
- * - Executes viewport trigger only once (viewport={{ once: true, amount: 0.2 }})
+ * - Executes viewport trigger only once (viewport={{ once: true, amount: "some" }})
  */
 export function ScrollReveal({
   children,
   animation = "fade-up",
   delay,
-  duration = 0.6,
+  duration = 0.45,
   className,
   as = "div",
   staggerIndex,
   staggerChildren,
-  amount = 0.2,
+  amount = "some",
   once = true,
   style,
   ...props
@@ -198,10 +192,8 @@ export function ScrollReveal({
     if (delay === undefined || delay <= 0) {
       return 0;
     }
-    // If passed as milliseconds (e.g., 100, 200, 300), convert to seconds
     const delayInSeconds = delay > 10 ? delay / 1000 : delay;
-    // Cap delay at maximum 400ms (0.4s) as required
-    return Math.min(delayInSeconds, 0.4);
+    return Math.min(delayInSeconds, 0.35);
   }, [delay, staggerIndex]);
 
   const variants = React.useMemo(
@@ -211,25 +203,155 @@ export function ScrollReveal({
 
   const transition: Transition = React.useMemo(
     () => ({
-      duration: shouldReduceMotion ? 0.2 : duration,
+      duration: shouldReduceMotion ? 0.15 : duration,
       delay: computedDelay,
       ease: SMOOTH_EASING,
     }),
     [computedDelay, duration, shouldReduceMotion]
   );
 
-  const MotionComponent = motionComponents[as] || motion.div;
+  const MotionComponent: React.ElementType = motionComponents[as] || motion.div;
 
   return (
     <MotionComponent
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, amount }}
+      viewport={{ once, amount, margin: "0px 0px -40px 0px" }}
       variants={variants}
       transition={transition}
       className={cn(className)}
       style={style}
-      {...(props as any)}
+      {...props}
+    >
+      {children}
+    </MotionComponent>
+  );
+}
+
+/**
+ * Stagger Container component for grids/lists.
+ * Attaches a SINGLE IntersectionObserver to the parent grid rather than N observers,
+ * eliminating observer strain on large pages.
+ */
+export function ScrollRevealContainer({
+  children,
+  stagger = 0.08,
+  delay = 0,
+  className,
+  as = "div",
+  once = true,
+  amount = "some",
+  ...props
+}: {
+  children?: React.ReactNode;
+  stagger?: number;
+  delay?: number;
+  className?: string;
+  as?: ScrollRevealAs;
+  once?: boolean;
+  amount?: number | "some" | "all";
+} & React.HTMLAttributes<HTMLElement>) {
+  const shouldReduceMotion = useReducedMotion();
+  const MotionComponent: React.ElementType = motionComponents[as] || motion.div;
+
+  const containerVariants: Variants = React.useMemo(
+    () => ({
+      hidden: {},
+      visible: {
+        transition: {
+          delayChildren: shouldReduceMotion ? 0 : delay,
+          staggerChildren: shouldReduceMotion ? 0 : stagger,
+        },
+      },
+    }),
+    [delay, shouldReduceMotion, stagger]
+  );
+
+  return (
+    <MotionComponent
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount, margin: "0px 0px -40px 0px" }}
+      variants={containerVariants}
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </MotionComponent>
+  );
+}
+
+/**
+ * Child item inside a ScrollRevealContainer.
+ * Inherits animation triggers from the parent with 0 additional observers.
+ */
+export function ScrollRevealItem({
+  children,
+  animation = "fade-up",
+  className,
+  as = "div",
+  duration = 0.45,
+  ...props
+}: {
+  children?: React.ReactNode;
+  animation?: ScrollRevealAnimation;
+  className?: string;
+  as?: ScrollRevealAs;
+  duration?: number;
+} & React.HTMLAttributes<HTMLElement>) {
+  const shouldReduceMotion = useReducedMotion();
+  const MotionComponent: React.ElementType = motionComponents[as] || motion.div;
+
+  const itemVariants: Variants = React.useMemo(() => {
+    if (shouldReduceMotion) {
+      return {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.15 } },
+      };
+    }
+    const hidden: Record<string, number> = { opacity: 0 };
+    const visible: Record<string, number> = { opacity: 1 };
+
+    switch (animation) {
+      case "fade-up":
+        hidden.y = 16;
+        visible.y = 0;
+        break;
+      case "fade-down":
+        hidden.y = -16;
+        visible.y = 0;
+        break;
+      case "fade-left":
+        hidden.x = 16;
+        visible.x = 0;
+        break;
+      case "fade-right":
+        hidden.x = -16;
+        visible.x = 0;
+        break;
+      case "zoom-in":
+        hidden.scale = 0.98;
+        visible.scale = 1;
+        break;
+      case "fade":
+      default:
+        break;
+    }
+
+    return {
+      hidden,
+      visible: {
+        ...visible,
+        transition: { duration, ease: SMOOTH_EASING },
+      },
+    };
+  }, [animation, duration, shouldReduceMotion]);
+
+  return (
+    <MotionComponent
+      variants={itemVariants}
+      className={cn(className)}
+      {...props}
     >
       {children}
     </MotionComponent>

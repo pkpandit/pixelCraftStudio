@@ -6,23 +6,28 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hover?: boolean
   /** If true, applies frosted glass backdrop blur */
   glass?: boolean
+  /** If true, renders with the agency featured highlight state (like the reference grid) */
+  featured?: boolean
 }
 
 /**
- * Standard Card container matching the design system:
+ * Standard Card container matching the creative-agency design language:
  * - 20px rounded corners
- * - Dual-layer soft shadow in light mode
- * - Dark gradient (#171720 to #0F0F14) with top specular highlight in dark mode
+ * - Soft diffused dual-layer shadow
+ * - In dark mode: deep surface with top specular highlight
+ * - Smooth hover lift (-translate-y-1.5)
  */
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, hover = false, glass = false, ...props }, ref) => (
+  ({ className, hover = false, glass = false, featured = false, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        "rounded-[20px] border border-[#E4E4E7] bg-white text-[#0A0A0A] shadow-[0_1px_3px_rgba(0,0,0,0.04),0_6px_24px_-4px_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.9)] transition-all duration-300 ease-out dark:border-white/[0.08] dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] dark:text-[#FFFFFF] dark:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)]",
+        "rounded-[20px] border border-[#E4E4E7] bg-white text-[#0A0A0A] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.03),0_10px_24px_-4px_rgba(0,0,0,0.04)] transition-all duration-300 ease-out dark:border-white/[0.08] dark:bg-gradient-to-b dark:from-[#15151D] dark:to-[#0F0F14] dark:text-[#FFFFFF] dark:shadow-[0_16px_36px_-8px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.07)]",
         glass && "glass-panel",
+        featured &&
+          "bg-[#4F46E5] text-white border-transparent shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] dark:bg-gradient-to-br dark:from-[#6366F1] dark:via-[#7C3AED] dark:to-[#EC4899] dark:border-white/20",
         hover &&
-          "hover:-translate-y-1 hover:border-[#4F46E5]/40 hover:shadow-[0_12px_32px_-4px_rgba(79,70,229,0.14),0_4px_12px_-2px_rgba(0,0,0,0.04)] dark:hover:from-[#1E1E2A] dark:hover:to-[#13131A] dark:hover:border-[#818CF8]/50 dark:hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.9),0_0_35px_-5px_rgba(129,140,248,0.25),inset_0_1px_0_0_rgba(255,255,255,0.16)]",
+          "hover:-translate-y-1.5 hover:border-[#4F46E5]/40 hover:shadow-[0_20px_40px_-8px_rgba(79,70,229,0.12),0_6px_16px_-4px_rgba(0,0,0,0.04)] dark:hover:border-[#C084FC]/50 dark:hover:shadow-[0_24px_50px_-10px_rgba(0,0,0,0.95),0_0_30px_-4px_rgba(192,132,252,0.22),inset_0_1px_0_0_rgba(255,255,255,0.14)]",
         className
       )}
       {...props}

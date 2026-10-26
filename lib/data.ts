@@ -86,18 +86,18 @@ export interface FAQItem {
 }
 
 export const PROFILE = {
-  name: "Pramod Upadhyay",
-  title: "Full Stack Developer & UI Designer",
-  eyebrow: "FULL STACK DEVELOPER & UI DESIGNER",
+  name: "pixelCraftStudio",
+  title: "Digital Products & UI Design Studio",
+  eyebrow: "DIGITAL PRODUCTS & UI DESIGN STUDIO",
   headline: "Beautiful Digital Products. Websites Built to Perform.",
   heroBio:
-    "I’m Pramod Upadhyay, a Full Stack Developer and UI Designer with 11+ years of experience. I build modern websites, create ready-to-use digital products, and help businesses turn ideas into great digital experiences.",
+    "Welcome to pixelCraftStudio. We build modern websites, create ready-to-use digital products, and help businesses turn ideas into great digital experiences.",
   yearsExperience: "11+",
   aboutBio: [
-    "I’m a Full Stack Developer and UI Designer passionate about building useful, beautiful, and reliable digital experiences.",
-    "With over 11 years of experience, I help businesses, startups, and creators bring their ideas to life. I work with React, Next.js, Node.js, HTML, CSS, and JavaScript to build modern websites and web applications.",
-    "I also create digital products that help developers and designers work smarter. From website templates and admin dashboards to Figma UI kits and graphic design templates, my goal is to make high-quality resources accessible and easy to use.",
-    "Whether you need a ready-made template or a custom website built around your needs, I’m here to help.",
+    "We are a digital product and design studio passionate about building useful, beautiful, and reliable digital experiences.",
+    "With over 11 years of experience, we help businesses, startups, and creators bring their ideas to life. We work with React, Next.js, Node.js, HTML, CSS, and JavaScript to build modern websites and web applications.",
+    "We also create digital products that help developers and designers work smarter. From website templates and admin dashboards to Figma UI kits and graphic design templates, our goal is to make high-quality resources accessible and easy to use.",
+    "Whether you need a ready-made template or a custom website built around your needs, pixelCraftStudio is here to help.",
   ],
   location: "Bangalore, India & Remote Worldwide",
   availability: "Available for freelance projects & contracts",
@@ -106,7 +106,7 @@ export const PROFILE = {
     linkedin: "https://linkedin.com",
     dribbble: "https://dribbble.com",
     twitter: "https://twitter.com",
-    email: "pramod@example.com",
+    email: "contact@pixelcraftstudio.com",
   },
   skills: {
     core: ["React", "Next.js", "Node.js", "HTML5", "CSS3", "JavaScript", "TypeScript"],
@@ -280,7 +280,7 @@ const COMMON_PRODUCT_FAQS = [
   },
   {
     question: "Q7. Can I get help if I have a problem?",
-    answer: "Yes! I provide direct email support for setup assistance, bug reports, and setup clarification. Feel free to reach out to pramod@example.com with your order details.",
+    answer: "Yes! We provide direct email support for setup assistance, bug reports, and setup clarification. Feel free to reach out to contact@pixelcraftstudio.com with your order details.",
   },
 ];
 
@@ -743,7 +743,7 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Founder & CEO",
     company: "FinFlow Treasury",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-    content: "Pramod is an exceptional full-stack developer and UI designer. The quality of his code, clear communication, and dedication to delivering a polished product made our project a complete success.",
+    content: "pixelCraftStudio is an exceptional digital development and UI design studio. The quality of their code, clear communication, and dedication to delivering a polished product made our project a complete success.",
     rating: 5,
     projectType: "Full Stack Web Application",
   },
@@ -753,7 +753,7 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Head of Product",
     company: "NeoCommerce",
     avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
-    content: "Working with Pramod on our website redesign completely transformed our business. The layout is beautiful, page speeds are blazing fast, and our customer engagement skyrocketed.",
+    content: "Working with pixelCraftStudio on our website redesign completely transformed our business. The layout is beautiful, page speeds are blazing fast, and our customer engagement skyrocketed.",
     rating: 5,
     projectType: "Website Redesign & Development",
   },
@@ -763,9 +763,39 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Lead Engineer",
     company: "Echo Labs AI",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-    content: "I purchased Pramod's SaaS template and it saved our team months of development. The architecture is clean, the documentation is great, and his customer support is top tier.",
+    content: "I purchased pixelCraftStudio's SaaS template and it saved our team months of development. The architecture is clean, the documentation is great, and their customer support is top tier.",
     rating: 5,
     projectType: "SaaS Launchpad Pro Template",
+  },
+  {
+    id: "test-4",
+    name: "Sophia Reynolds",
+    role: "Design Director",
+    company: "Aura Creative Agency",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+    content: "The Apex Design System Figma UI Kit is hands down the best investment our studio made this year. Every token is auto-layout ready, structured cleanly, and shaved weeks off our client deliverables.",
+    rating: 5,
+    projectType: "Apex Figma UI Kit",
+  },
+  {
+    id: "test-5",
+    name: "Alex Thorne",
+    role: "VP of Engineering",
+    company: "PulseHealth Technologies",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    content: "pixelCraftStudio delivered our real-time telemetry dashboard with phenomenal speed and architecture. Page loads are under 400ms, charts are silky smooth, and the TypeScript structure is a joy to extend.",
+    rating: 5,
+    projectType: "Custom SaaS Dashboard",
+  },
+  {
+    id: "test-6",
+    name: "Amara Patel",
+    role: "Co-Founder & CMO",
+    company: "Nexus Growth Lab",
+    avatar: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=200&q=80",
+    content: "From the initial wireframes to production release, the dedication to visual polish and conversion optimization was remarkable. Our website conversion rate surged by 42% in our very first launch month.",
+    rating: 5,
+    projectType: "Brand & Web Redesign",
   },
 ];
 

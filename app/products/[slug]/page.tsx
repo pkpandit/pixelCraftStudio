@@ -12,12 +12,15 @@ import {
   Sparkles,
   ChevronRight,
   FileCheck2,
-  Zap,
 } from "lucide-react";
 import { DIGITAL_PRODUCTS } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import {
+  ScrollReveal,
+  ScrollRevealContainer,
+  ScrollRevealItem,
+} from "@/components/ui/ScrollReveal";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -37,12 +40,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!product) {
     return {
-      title: "Product Not Found | Pramod Upadhyay",
+      title: "Product Not Found | pixelCraftStudio",
     };
   }
 
   return {
-    title: `${product.title} — ${product.productType} for ${product.targetCustomer} | Pramod Upadhyay`,
+    title: `${product.title} — ${product.productType} for ${product.targetCustomer} | pixelCraftStudio`,
     description: `Discover ${product.title}, a customizable ${product.productType} designed to help ${product.targetCustomer} ${product.mainBenefit}. Explore features, included files, and license details.`,
     keywords: [
       product.title,
@@ -50,12 +53,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       `Professional ${product.productType}`,
       `Customizable ${product.productType}`,
       `${product.productType} for commercial projects`,
-      "Pramod Upadhyay",
+      "pixelCraftStudio",
     ],
     openGraph: {
       title: `${product.title} — ${product.productType}`,
       description: product.description,
       images: [{ url: product.thumbnail }],
+    },
+    alternates: {
+      canonical: `/products/${product.slug}`,
     },
   };
 }
@@ -68,12 +74,38 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description,
+    image: product.thumbnail,
+    category: product.category,
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: `https://pixelcraftstudio.com/products/${product.slug}`,
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: product.rating,
+      reviewCount: product.reviewsCount,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-[#09090B] text-[#0A0A0A] dark:text-white">
+      {/* Product JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-[#E4E4E7] dark:border-white/[0.08] bg-[#F8FAFC] dark:bg-[#0D0D11] py-4">
+      <div className="border-b border-[#E4E4E7] dark:border-white/[0.08] bg-[#F8FAFC] dark:bg-[#0B0B0F] py-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-2 text-xs sm:text-sm text-[#71717A] dark:text-[#A1A1AA] font-medium">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm text-[#71717A] dark:text-[#A1A1AA] font-medium">
             <Link href="/" className="hover:text-[#0A0A0A] dark:hover:text-white transition-colors">
               Home
             </Link>
@@ -100,13 +132,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* Left: Product Image & Highlights (fade-left) */}
+            {/* Left: Product Image & Highlights */}
             <ScrollReveal
-              animation="fade-left"
-              delay={0.1}
+              animation="fade-up"
+              delay={0}
               className="lg:col-span-7 space-y-6 flex flex-col w-full"
             >
-              <div className="relative aspect-16/10 w-full overflow-hidden rounded-[24px] border border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-[#121215] shadow-lg">
+              <div className="relative aspect-16/10 w-full overflow-hidden rounded-[20px] border border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-[#121215] shadow-lg">
                 <Image
                   src={product.thumbnail}
                   alt={product.title}
@@ -143,10 +175,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
             </ScrollReveal>
 
-            {/* Right: Title, Pricing & CTAs (fade-right) */}
+            {/* Right: Title, Pricing & CTAs */}
             <ScrollReveal
-              animation="fade-right"
-              delay={0.15}
+              animation="fade-up"
+              delay={0.1}
               className="lg:col-span-5 space-y-6 flex flex-col w-full"
             >
               <div className="space-y-4">
@@ -224,8 +256,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       variant="outline"
-                      size="default"
-                      className="w-full rounded-full py-5 font-bold"
+                      size="lg"
+                      className="w-full rounded-full py-6 font-bold text-base"
                       leftIcon={<ExternalLink className="h-4 w-4" />}
                     >
                       Live Preview
@@ -248,16 +280,16 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <section className="py-24 sm:py-36 border-b border-[#E4E4E7] dark:border-white/[0.08] bg-[#F8FAFC] dark:bg-[#0B0B0F]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
           <ScrollReveal animation="fade-up" delay={0}>
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Overview</span>
-              </div>
-              <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
+            <div className="space-y-4">
+              <span className="agency-eyebrow">
+                Overview
+              </span>
+              <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
                 A Better Starting Point for Your Next Project
               </h2>
+              <div className="agency-heading-bar ml-0 mr-auto" />
 
-              <div className="space-y-4 text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
+              <div className="space-y-4 text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA] leading-relaxed pt-2">
                 <p>
                   Building a professional digital experience from scratch takes time. <strong className="text-[#0A0A0A] dark:text-white font-bold">{product.title}</strong> gives you a ready-made foundation so you can focus on customizing your project and bringing your ideas to life.
                 </p>
@@ -273,7 +305,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Designed for Practical Use Card */}
           <ScrollReveal animation="fade-up" delay={0.15}>
-            <Card className="p-5 sm:p-8 md:p-12 space-y-6 sm:space-y-8 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-md">
+            <Card className="p-5 sm:p-8 md:p-12 space-y-6 sm:space-y-8 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-md rounded-[20px]">
               <div className="space-y-2">
                 <h3 className="font-heading text-2xl sm:text-3xl font-black text-[#0A0A0A] dark:text-white">
                   Designed for Practical Use
@@ -284,7 +316,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="rounded-[18px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
+                <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
                   <span className="font-heading text-base font-bold text-[#0A0A0A] dark:text-white flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     Clean design
@@ -294,7 +326,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   </p>
                 </div>
 
-                <div className="rounded-[18px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
+                <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
                   <span className="font-heading text-base font-bold text-[#0A0A0A] dark:text-white flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     Useful features
@@ -304,7 +336,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   </p>
                 </div>
 
-                <div className="rounded-[18px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
+                <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
                   <span className="font-heading text-base font-bold text-[#0A0A0A] dark:text-white flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     Customization
@@ -314,7 +346,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   </p>
                 </div>
 
-                <div className="rounded-[18px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
+                <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-5 space-y-2">
                   <span className="font-heading text-base font-bold text-[#0A0A0A] dark:text-white flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     Friendly files
@@ -333,7 +365,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <Button
                   href={`/contact?product=${product.slug}`}
                   size="lg"
-                  className="w-full sm:w-auto rounded-full px-8 font-bold"
+                  className="w-full sm:w-auto rounded-full px-8 py-5 text-base font-bold shadow-md shadow-indigo-500/25"
                   rightIcon={<ArrowRight className="h-4 w-4" />}
                 >
                   Get Instant Access
@@ -351,29 +383,29 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
           <ScrollReveal animation="fade-up">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Features</span>
-              </div>
+              <span className="agency-eyebrow">
+                Features
+              </span>
               <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
                 Everything You Need to Get Started
               </h2>
+              <div className="agency-heading-bar ml-0 mr-auto" />
               <p className="text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA]">
                 Carefully engineered to streamline your workflow and accelerate your delivery.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="space-y-5">
-            {product.keyFeatures.map((feat, idx) => (
-              <ScrollReveal
+          {/* Key Features with Single Observer */}
+          <ScrollRevealContainer className="space-y-5">
+            {product.keyFeatures.map((feat) => (
+              <ScrollRevealItem
                 key={feat.number}
                 animation="fade-up"
-                delay={Math.min(idx * 80, 400)}
               >
                 <Card
                   hover
-                  className="p-5 sm:p-8 flex flex-col sm:flex-row items-start gap-4 sm:gap-6 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-xs"
+                  className="p-5 sm:p-8 flex flex-col sm:flex-row items-start gap-4 sm:gap-6 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-xs rounded-[20px]"
                 >
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[16px] bg-[#4F46E5]/10 dark:bg-[#C084FC]/10 font-heading text-lg font-black text-[#4F46E5] dark:text-[#C084FC]">
                     {feat.number}
@@ -387,9 +419,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     </p>
                   </div>
                 </Card>
-              </ScrollReveal>
+              </ScrollRevealItem>
             ))}
-          </div>
+          </ScrollRevealContainer>
         </div>
       </section>
 
@@ -400,13 +432,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-10">
           <ScrollReveal animation="fade-up">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Package Deliverables</span>
-              </div>
+              <span className="agency-eyebrow">
+                Package Deliverables
+              </span>
               <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
                 What Is Included?
               </h2>
+              <div className="agency-heading-bar ml-0 mr-auto" />
               <p className="text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA]">
                 Your purchase includes the following items, as applicable to this product:
               </p>
@@ -415,7 +447,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Included Checklist */}
           <ScrollReveal animation="fade-up" delay={0.1}>
-            <Card className="p-5 sm:p-8 md:p-10 space-y-6 border-[#E4E4E7] dark:border-white/[0.08] bg-[#FAFAF9] dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14]">
+            <Card className="p-5 sm:p-8 md:p-10 space-y-6 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] rounded-[20px]">
               <h3 className="font-heading text-lg font-bold text-[#0A0A0A] dark:text-white flex items-center gap-2.5">
                 <FileCheck2 className="h-5 w-5 text-emerald-500" />
                 <span>Included Items</span>
@@ -434,7 +466,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Not Included Disclosure */}
           <ScrollReveal animation="fade-up" delay={0.15}>
-            <div className="rounded-[22px] border border-[#E4E4E7] dark:border-white/10 bg-[#FAFAF9] dark:bg-gradient-to-b dark:from-[#16161F] dark:to-[#0F0F14] p-5 sm:p-7 space-y-4 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+            <div className="rounded-[20px] border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#16161F] dark:to-[#0F0F14] p-5 sm:p-7 space-y-4 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
               <h4 className="font-heading text-sm font-bold text-[#0A0A0A] dark:text-white flex items-center gap-2">
                 <XCircle className="h-4 w-4 text-[#71717A] dark:text-[#A1A1AA]" />
                 <span>Not Included</span>
@@ -459,33 +491,33 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
           <ScrollReveal animation="fade-up">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Target Audience</span>
-              </div>
+              <span className="agency-eyebrow">
+                Target Audience
+              </span>
               <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
                 Who Is This Product For?
               </h2>
+              <div className="agency-heading-bar ml-0 mr-auto" />
               <p className="text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA]">
                 {product.title} is designed for people who want a practical starting point for creating professional digital experiences.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Audience Cards with Single Observer */}
+          <ScrollRevealContainer className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
               { title: "Freelancers", desc: product.whoIsItFor.freelancers },
               { title: "Startups", desc: product.whoIsItFor.startups },
               { title: "Small Businesses", desc: product.whoIsItFor.smallBusinesses },
               { title: "Agencies", desc: product.whoIsItFor.agencies },
-            ].map((audience, i) => (
-              <ScrollReveal
+            ].map((audience) => (
+              <ScrollRevealItem
                 key={audience.title}
                 animation="fade-up"
-                delay={Math.min(i * 100, 400)}
                 className="flex flex-col h-full w-full"
               >
-                <Card hover className="p-5 sm:p-8 space-y-3 h-full">
+                <Card hover className="p-5 sm:p-8 space-y-3 h-full rounded-[20px]">
                   <h3 className="font-heading text-xl font-bold text-[#0A0A0A] dark:text-white">
                     {audience.title}
                   </h3>
@@ -493,13 +525,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     {audience.desc}
                   </p>
                 </Card>
-              </ScrollReveal>
+              </ScrollRevealItem>
             ))}
-          </div>
+          </ScrollRevealContainer>
 
           {/* Is this product right for you? */}
           <ScrollReveal animation="fade-up" delay={0.2}>
-            <Card className="p-5 sm:p-8 space-y-3">
+            <Card className="p-5 sm:p-8 space-y-3 rounded-[20px]">
               <h4 className="font-heading text-base font-bold text-[#0A0A0A] dark:text-white">
                 Is This Product Right for You?
               </h4>
@@ -518,29 +550,29 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
           <ScrollReveal animation="fade-up">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Questions & Answers</span>
-              </div>
+              <span className="agency-eyebrow">
+                Questions & Answers
+              </span>
               <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
                 Questions About This Product
               </h2>
+              <div className="agency-heading-bar ml-0 mr-auto" />
               <p className="text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA]">
                 Everything you need to know about purchasing, licensing, customization, and delivery.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="space-y-5">
+          {/* Product FAQs with Single Observer */}
+          <ScrollRevealContainer className="space-y-5">
             {product.faqs.map((faq, i) => (
-              <ScrollReveal
+              <ScrollRevealItem
                 key={i}
                 animation="fade-up"
-                delay={Math.min(i * 80, 400)}
               >
                 <Card
                   hover
-                  className="p-5 sm:p-7 space-y-2.5"
+                  className="p-5 sm:p-7 space-y-2.5 rounded-[20px]"
                 >
                   <h3 className="font-heading text-lg sm:text-xl font-bold text-[#0A0A0A] dark:text-white">
                     {faq.question}
@@ -549,9 +581,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     {faq.answer}
                   </p>
                 </Card>
-              </ScrollReveal>
+              </ScrollRevealItem>
             ))}
-          </div>
+          </ScrollRevealContainer>
         </div>
       </section>
 
@@ -562,13 +594,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-10">
           <ScrollReveal animation="fade-up">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Licensing</span>
-              </div>
+              <span className="agency-eyebrow">
+                Licensing
+              </span>
               <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white">
                 Simple and Transparent Usage Terms
               </h2>
+              <div className="agency-heading-bar ml-0 mr-auto" />
               <p className="text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA]">
                 Your purchase grants you a license to use <strong className="text-[#0A0A0A] dark:text-white font-bold">{product.title}</strong> under the terms specified at checkout.
               </p>
@@ -579,7 +611,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ScrollReveal animation="fade-left" delay={0.1} className="flex flex-col h-full w-full">
               {/* Permitted Uses */}
-              <Card className="p-5 sm:p-8 space-y-4 border-emerald-500/30 dark:border-emerald-500/40 bg-white dark:bg-gradient-to-b dark:from-emerald-950/25 dark:to-[#101015] dark:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(16,185,129,0.15)] h-full">
+              <Card className="p-5 sm:p-8 space-y-4 border-emerald-500/30 dark:border-emerald-500/40 bg-white dark:bg-gradient-to-b dark:from-emerald-950/25 dark:to-[#101015] dark:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(16,185,129,0.15)] h-full rounded-[20px]">
                 <h3 className="font-heading text-lg font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5" />
                   <span>Permitted Uses</span>
@@ -597,7 +629,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             <ScrollReveal animation="fade-right" delay={0.15} className="flex flex-col h-full w-full">
               {/* Restrictions */}
-              <Card className="p-5 sm:p-8 space-y-4 border-rose-500/30 dark:border-rose-500/40 bg-white dark:bg-gradient-to-b dark:from-rose-950/25 dark:to-[#101015] dark:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(244,63,94,0.15)] h-full">
+              <Card className="p-5 sm:p-8 space-y-4 border-rose-500/30 dark:border-rose-500/40 bg-white dark:bg-gradient-to-b dark:from-rose-950/25 dark:to-[#101015] dark:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(244,63,94,0.15)] h-full rounded-[20px]">
                 <h3 className="font-heading text-lg font-bold text-rose-600 dark:text-rose-400 flex items-center gap-2">
                   <XCircle className="h-5 w-5" />
                   <span>Restrictions</span>
@@ -616,7 +648,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Important Notes */}
           <ScrollReveal animation="fade-up" delay={0.2}>
-            <Card className="p-5 sm:p-7 space-y-3 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-xs">
+            <Card className="p-5 sm:p-7 space-y-3 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-xs rounded-[20px]">
               <h4 className="font-heading text-sm font-bold text-[#0A0A0A] dark:text-white">
                 Important Notes
               </h4>
@@ -641,24 +673,26 @@ export default async function ProductDetailPage({ params }: PageProps) {
       {/* =========================================================================
           9. FINAL CALL TO ACTION (Subtle Section Band for Clean Separation)
           ========================================================================= */}
-      <ScrollReveal animation="zoom-in" duration={0.65}>
-        <section className="py-24 sm:py-36 text-center bg-[#F8FAFC] dark:bg-[#0B0B0F] border-t border-[#E4E4E7] dark:border-white/[0.08] relative overflow-hidden">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-60 dark:opacity-40"
-          >
-            <div className="h-[460px] w-[800px] rounded-full bg-gradient-to-tr from-[#4F46E5]/15 via-[#7C3AED]/10 to-transparent blur-3xl" />
-          </div>
+      <section className="py-24 sm:py-36 text-center bg-[#F8FAFC] dark:bg-[#0B0B0F] border-t border-[#E4E4E7] dark:border-white/[0.08] relative overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-60 dark:opacity-40"
+        >
+          <div className="h-[460px] w-[800px] rounded-full bg-gradient-to-tr from-[#4F46E5]/15 via-[#7C3AED]/10 to-transparent blur-3xl" />
+        </div>
 
+        <ScrollReveal animation="fade-up">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#4F46E5] uppercase dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-              <Zap className="h-3.5 w-3.5" />
-              <span>Instant Download</span>
-            </div>
+            <span className="agency-eyebrow">
+              Instant Download
+            </span>
 
-            <h2 className="font-heading text-4xl sm:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
-              Ready to Start Your Next Project?
-            </h2>
+            <div className="space-y-4">
+              <h2 className="font-heading text-4xl sm:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
+                Ready to Start Your Next Project?
+              </h2>
+              <div className="agency-heading-bar mx-auto" />
+            </div>
 
             <p className="text-base sm:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed max-w-xl mx-auto text-balance">
               Give your next idea a practical starting point with <strong className="text-[#0A0A0A] dark:text-white font-bold">{product.title}</strong>. Explore the features, review the requirements, and choose the product if it fits your needs.
@@ -693,8 +727,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
               *Please review the product details and license before completing your purchase.*
             </p>
           </div>
-        </section>
-      </ScrollReveal>
+        </ScrollReveal>
+      </section>
     </div>
   );
 }

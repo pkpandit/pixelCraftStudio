@@ -19,11 +19,15 @@ export function ScrollToTop({ className = "", threshold = 400 }: ScrollToTopProp
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      if (window.scrollY > threshold) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsVisible(window.scrollY > threshold);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

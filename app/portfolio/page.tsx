@@ -4,21 +4,24 @@ import { PortfolioView } from "./components/portfolio-view";
 import PortfolioLoading from "./loading";
 
 export const metadata: Metadata = {
-  title: "Case Studies & Shipped Portfolio | Pramod Upadhyay",
+  title: "Case Studies & Shipped Portfolio | pixelCraftStudio",
   description:
-    "Explore case studies of custom Next.js web applications, e-commerce platforms, and scalable design systems shipped by Pramod Upadhyay with measurable performance outcomes.",
+    "Explore case studies of custom Next.js web applications, e-commerce platforms, and scalable design systems shipped by pixelCraftStudio with measurable performance outcomes.",
   keywords: [
-    "Portfolio Pramod Upadhyay",
+    "Portfolio pixelCraftStudio",
     "Next.js Case Studies",
     "React Web App Portfolio",
-    "Full Stack Developer Portfolio",
+    "Design Studio Portfolio",
     "Tailwind CSS Projects",
   ],
   openGraph: {
-    title: "Case Studies & Shipped Portfolio | Pramod Upadhyay",
+    title: "Case Studies & Shipped Portfolio | pixelCraftStudio",
     description:
       "Explore case studies of custom Next.js web applications, e-commerce platforms, and scalable design systems.",
     type: "website",
+  },
+  alternates: {
+    canonical: "/portfolio",
   },
 };
 

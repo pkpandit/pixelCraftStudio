@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   TrendingUp,
 } from "lucide-react";
-import { FaGithub } from "react-icons/fa6";
+import { SocialIcon } from "@/components/ui/social-icons";
 import { PROJECTS } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -48,14 +48,17 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
           </ScrollReveal>
 
           <ScrollReveal animation="fade-up" delay={0.1}>
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
-              <span className="block">Real Work. Real Results.</span>
-              <span className="block">
-                <span className="gradient-text">
-                  Shipped for Ambition.
+            <div className="space-y-4">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
+                <span className="block">Real Work. Real Results.</span>
+                <span className="block">
+                  <span className="gradient-text">
+                    Shipped for Ambition.
+                  </span>
                 </span>
-              </span>
-            </h1>
+              </h1>
+              <div className="agency-heading-bar mx-auto" />
+            </div>
           </ScrollReveal>
 
           <ScrollReveal animation="fade-up" delay={0.2}>
@@ -78,7 +81,7 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
                 delay={Math.min(i * 100, 400)}
                 className="flex h-full"
               >
-                <Card hover className="p-4 sm:p-5 w-full h-full">
+                <Card hover className="p-4 sm:p-5 w-full h-full rounded-[20px]">
                   <span className="text-xs text-[#71717A] dark:text-[#A1A1AA] font-semibold">{metric.label}</span>
                   <p className="font-heading text-xl sm:text-2xl font-black text-[#0A0A0A] dark:text-white pt-1">{metric.value}</p>
                 </Card>
@@ -89,17 +92,23 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
       </section>
 
       {/* Case Studies Showcase */}
-      <section className="py-20 sm:py-28 bg-[#F8FAFC] dark:bg-[#09090B]">
+      <section className="py-24 sm:py-36 bg-[#F8FAFC] dark:bg-[#0B0B0F] border-b border-[#E4E4E7] dark:border-white/[0.08]">
         <Container className="space-y-12">
           {/* Category Filter Pills */}
           <ScrollReveal animation="fade-up" delay={0.1}>
-            <div className="flex items-center justify-center gap-2 sm:gap-2.5 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div
+              role="tablist"
+              aria-label="Filter case studies by category"
+              className="flex items-center justify-center gap-2 sm:gap-2.5 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0"
+            >
               {CATEGORIES.map((cat) => {
                 const isSelected = selectedCategory === cat;
                 return (
                   <button
                     key={cat}
                     type="button"
+                    role="tab"
+                    aria-selected={isSelected}
                     onClick={() => setSelectedCategory(cat)}
                     className={`rounded-full px-4 sm:px-6 py-2 text-xs sm:text-sm font-bold transition-all duration-300 select-none cursor-pointer ${
                       isSelected
@@ -132,11 +141,11 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
                 >
                   <Card
                     hover
-                    className="group flex flex-col justify-between p-6 sm:p-8 md:p-12 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-md dark:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)] w-full h-full overflow-hidden"
+                    className="group flex flex-col justify-between p-6 sm:p-8 md:p-12 border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14] shadow-md dark:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)] w-full h-full overflow-hidden rounded-[20px]"
                   >
                     <div className="space-y-6">
                       {/* Screenshot Container with Next.js Image Optimization */}
-                      <div className="relative aspect-16/9 w-full overflow-hidden rounded-[18px] bg-[#F4F4F5] dark:bg-[#15151A] border border-[#E4E4E7] dark:border-white/10">
+                      <div className="relative aspect-16/9 w-full overflow-hidden rounded-[16px] bg-[#F4F4F5] dark:bg-[#15151A] border border-[#E4E4E7] dark:border-white/10">
                         <Image
                           src={project.image}
                           alt={project.title}
@@ -169,35 +178,23 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
 
                       {/* Two-Column Project Details: Challenge & Solution */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <ScrollReveal
-                          animation="fade-left"
-                          delay={0.1}
-                          className="flex flex-col h-full w-full"
-                        >
-                          <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-[#F8FAFC] dark:bg-[#161620] p-4 sm:p-5 space-y-1.5 h-full">
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-rose-500">
-                              Challenge
-                            </span>
-                            <p className="text-xs text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
-                              {project.challenge}
-                            </p>
-                          </div>
-                        </ScrollReveal>
+                        <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-[#F8FAFC] dark:bg-[#161620] p-4 sm:p-5 space-y-1.5 h-full">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-rose-500">
+                            Challenge
+                          </span>
+                          <p className="text-xs text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
+                            {project.challenge}
+                          </p>
+                        </div>
 
-                        <ScrollReveal
-                          animation="fade-right"
-                          delay={0.15}
-                          className="flex flex-col h-full w-full"
-                        >
-                          <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-[#F8FAFC] dark:bg-[#161620] p-4 sm:p-5 space-y-1.5 h-full">
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500">
-                              Solution
-                            </span>
-                            <p className="text-xs text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
-                              {project.solution}
-                            </p>
-                          </div>
-                        </ScrollReveal>
+                        <div className="rounded-[16px] border border-[#E4E4E7] dark:border-white/10 bg-[#F8FAFC] dark:bg-[#161620] p-4 sm:p-5 space-y-1.5 h-full">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500">
+                            Solution
+                          </span>
+                          <p className="text-xs text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
+                            {project.solution}
+                          </p>
+                        </div>
                       </div>
 
                       {/* Measurable Results */}
@@ -251,7 +248,7 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
                           variant="outline"
                           size="sm"
                           className="rounded-full px-5 text-xs font-bold"
-                          leftIcon={<FaGithub className="h-3.5 w-3.5 mr-1" />}
+                          leftIcon={<SocialIcon name="github" className="h-3.5 w-3.5 mr-1" />}
                         >
                           Code
                         </Button>
@@ -266,17 +263,15 @@ export function PortfolioView({ className = "" }: PortfolioViewProps) {
       </section>
 
       {/* Final CTA Banner */}
-      <ScrollReveal animation="zoom-in" duration={0.65}>
-        <CTASection
-          eyebrow="Ready for Similar Results?"
-          title="Let’s Build Your Next High-Performance Project."
-          description="Whether you need a brand-new website or a custom web application, I’d love to discuss how we can turn your ideas into impactful software."
-          primaryButtonText="Start a Conversation"
-          primaryButtonHref="/contact"
-          secondaryButtonText="Explore Services"
-          secondaryButtonHref="/services"
-        />
-      </ScrollReveal>
+      <CTASection
+        eyebrow="Ready for Similar Results?"
+        title="Let’s Build Your Next High-Performance Project."
+        description="Whether you need a brand-new website or a custom web application, I’d love to discuss how we can turn your ideas into impactful software."
+        primaryButtonText="Start a Conversation"
+        primaryButtonHref="/contact"
+        secondaryButtonText="Explore Services"
+        secondaryButtonHref="/services"
+      />
     </div>
   );
 }

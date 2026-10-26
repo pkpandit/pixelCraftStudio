@@ -50,10 +50,10 @@ export function SectionHeading({
       )}
       {...props}
     >
-      {/* Eyebrow Pill */}
+      {/* Eyebrow Pill / Tag */}
       {eyebrow && (
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
+        <div className="flex items-center justify-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/20 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-extrabold tracking-[0.2em] text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/25 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
             {eyebrowIcon ?? <Sparkles className="h-3.5 w-3.5" />}
             <span>{eyebrow}</span>
           </div>
@@ -61,20 +61,25 @@ export function SectionHeading({
       )}
 
       {/* Main H2 Heading */}
-      <h2
-        className={cn(
-          "font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight",
-          titleClassName
-        )}
-      >
-        {title}
-      </h2>
+      <div className="space-y-3.5">
+        <h2
+          className={cn(
+            "font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-[1.12]",
+            titleClassName
+          )}
+        >
+          {title}
+        </h2>
+
+        {/* Agency Signature Centered Accent Bar */}
+        <div className={cn("agency-heading-bar", align === "left" && "ml-0 mr-auto", align === "right" && "mr-0 ml-auto")} />
+      </div>
 
       {/* Description / Subtitle */}
       {description && (
         <p
           className={cn(
-            "text-base sm:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed text-balance font-normal",
+            "text-base sm:text-lg lg:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed text-balance font-normal pt-1",
             descriptionClassName
           )}
         >

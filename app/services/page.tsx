@@ -14,29 +14,49 @@ import {
   PenTool,
   Rocket,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { SERVICES } from "@/lib/data";
-import { FaqAccordion } from "@/components/shared/faq-accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Container } from "@/components/ui/container";
 import { CTASection } from "@/components/shared/cta-section";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import {
+  ScrollReveal,
+  ScrollRevealContainer,
+  ScrollRevealItem,
+} from "@/components/ui/ScrollReveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 
+const FaqAccordion = dynamic(
+  () =>
+    import("@/components/shared/faq-accordion").then((mod) => mod.FaqAccordion),
+  {
+    loading: () => (
+      <div className="min-h-[300px] space-y-4 max-w-3xl mx-auto">
+        <div className="h-16 w-full rounded-2xl bg-[#E4E4E7]/40 dark:bg-white/[0.04] animate-pulse" />
+        <div className="h-16 w-full rounded-2xl bg-[#E4E4E7]/40 dark:bg-white/[0.04] animate-pulse" />
+        <div className="h-16 w-full rounded-2xl bg-[#E4E4E7]/40 dark:bg-white/[0.04] animate-pulse" />
+      </div>
+    ),
+  }
+);
+
 export const metadata: Metadata = {
-  title: "Web Development & UI/UX Design Services | Pramod Upadhyay",
+  title: "Web Development & UI/UX Design Services | pixelCraftStudio",
   description:
-    "Explore bespoke freelance services by Pramod Upadhyay: custom website design, Next.js web development, full-stack web applications, UI/UX design, and website redesigns.",
+    "Explore bespoke services by pixelCraftStudio: custom website design, Next.js web development, full-stack web applications, UI/UX design, and digital systems.",
   keywords: [
     "Custom Website Design",
     "Website Development",
     "Web Application Development",
     "UI/UX Design",
     "Website Redesign",
-    "Next.js Freelancer",
-    "React Developer",
-    "Pramod Upadhyay",
+    "Next.js Development",
+    "React Studio",
+    "pixelCraftStudio",
   ],
+  alternates: {
+    canonical: "/services",
+  },
 };
 
 const PROCESS_STEPS = [
@@ -99,71 +119,69 @@ export default function ServicesPage() {
 
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <ScrollReveal animation="fade-up" delay={0}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Freelance & Custom Services</span>
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Freelance & Custom Services</span>
+              </div>
+
+              <div className="space-y-4">
+                <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
+                  <span className="block">Let&apos;s Build Something</span>
+                  <span className="block">
+                    <span className="gradient-text">
+                      Great Together.
+                    </span>
+                  </span>
+                </h1>
+                <div className="agency-heading-bar mx-auto" />
+              </div>
+
+              <p className="font-sans text-base sm:text-lg lg:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed sm:leading-[1.7] max-w-2xl sm:max-w-3xl mx-auto text-balance font-normal">
+                Need a website for your business or a custom web application for your next idea? I offer design and development services tailored to your goals.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <Button
+                  href="/contact"
+                  size="lg"
+                  className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold shadow-lg shadow-indigo-500/25"
+                  rightIcon={<ArrowRight className="h-4 w-4 ml-1" />}
+                >
+                  Discuss Your Project
+                </Button>
+                <Button
+                  href="/portfolio"
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold"
+                >
+                  View Past Work
+                </Button>
+              </div>
             </div>
           </ScrollReveal>
 
-          <ScrollReveal animation="fade-up" delay={0.1}>
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
-              <span className="block">Let&apos;s Build Something</span>
-              <span className="block">
-                <span className="gradient-text">
-                  Great Together.
-                </span>
-              </span>
-            </h1>
-          </ScrollReveal>
-
-          <ScrollReveal animation="fade-up" delay={0.2}>
-            <p className="font-sans text-base sm:text-lg lg:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed sm:leading-[1.7] max-w-2xl sm:max-w-3xl mx-auto text-balance font-normal">
-              Need a website for your business or a custom web application for your next idea? I offer design and development services tailored to your goals.
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal animation="fade-up" delay={0.3}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Button
-                href="/contact"
-                size="lg"
-                className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold shadow-lg shadow-indigo-500/25"
-                rightIcon={<ArrowRight className="h-4 w-4 ml-1" />}
-              >
-                Discuss Your Project
-              </Button>
-              <Button
-                href="/portfolio"
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold"
-              >
-                View Past Work
-              </Button>
-            </div>
-          </ScrollReveal>
-
-          {/* Quick Trust Pillars */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-10 sm:pt-12 border-t border-[#E4E4E7] dark:border-white/[0.08] max-w-4xl mx-auto text-left">
+          {/* Quick Trust Pillars with Single Observer */}
+          <ScrollRevealContainer className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-10 sm:pt-12 border-t border-[#E4E4E7] dark:border-white/[0.08] max-w-4xl mx-auto text-left">
             {[
               { label: "Experience", value: "11+ Years" },
               { label: "Delivery", value: "On-Time & Budget" },
               { label: "Engineering", value: "Clean Code" },
               { label: "Post-Launch", value: "30 Days Support" },
-            ].map((pillar, i) => (
-              <ScrollReveal
+            ].map((pillar) => (
+              <ScrollRevealItem
                 key={pillar.label}
                 animation="fade-up"
-                delay={Math.min(i * 100, 400)}
                 className="flex h-full"
               >
                 <Card hover className="p-4 sm:p-5 w-full h-full">
                   <span className="text-xs text-[#71717A] dark:text-[#A1A1AA] font-semibold">{pillar.label}</span>
                   <p className="font-heading text-lg sm:text-xl font-black text-[#0A0A0A] dark:text-white pt-1">{pillar.value}</p>
                 </Card>
-              </ScrollReveal>
+              </ScrollRevealItem>
             ))}
-          </div>
+          </ScrollRevealContainer>
         </div>
       </section>
 
@@ -223,12 +241,8 @@ export default function ServicesPage() {
                     }`}
                   >
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                      {/* Left: Info (fade-left) */}
-                      <ScrollReveal
-                        animation="fade-left"
-                        delay={0.1}
-                        className="lg:col-span-7 space-y-6 flex flex-col w-full"
-                      >
+                      {/* Left: Info */}
+                      <div className="lg:col-span-7 space-y-6 flex flex-col w-full">
                         <div className="flex items-center gap-3">
                           <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-tr from-[#4F46E5]/10 via-[#7C3AED]/10 to-transparent dark:from-[#6366F1]/20 dark:via-[#8B5CF6]/15 dark:to-[#EC4899]/10 text-[#4F46E5] dark:text-[#C084FC] border border-[#4F46E5]/20 dark:border-white/10 shadow-xs">
                             <IconC className="h-7 w-7" />
@@ -264,14 +278,10 @@ export default function ServicesPage() {
                             <span>Codebase Ownership Included</span>
                           </span>
                         </div>
-                      </ScrollReveal>
+                      </div>
 
-                      {/* Right: Deliverables List & CTA (fade-right) */}
-                      <ScrollReveal
-                        animation="fade-right"
-                        delay={0.15}
-                        className="lg:col-span-5 flex flex-col w-full"
-                      >
+                      {/* Right: Deliverables List & CTA */}
+                      <div className="lg:col-span-5 flex flex-col w-full">
                         <div className="rounded-[20px] border border-[#E4E4E7] dark:border-white/10 bg-[#F8FAFC] dark:bg-gradient-to-b dark:from-[#1A1A24] dark:to-[#121218] p-7 sm:p-8 space-y-6 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]">
                           <h4 className="font-heading text-xs font-bold text-[#0A0A0A] dark:text-white uppercase tracking-widest">
                             Key Deliverables Included:
@@ -297,7 +307,7 @@ export default function ServicesPage() {
                             </Button>
                           </div>
                         </div>
-                      </ScrollReveal>
+                      </div>
                     </div>
                   </Card>
                 </ScrollReveal>
@@ -320,31 +330,31 @@ export default function ServicesPage() {
             />
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {PROCESS_STEPS.map((step, index) => {
+          {/* 5-Step Process with Single Observer */}
+          <ScrollRevealContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {PROCESS_STEPS.map((step) => {
               const StepIcon = step.icon;
               return (
-                <ScrollReveal
+                <ScrollRevealItem
                   key={step.step}
                   animation="fade-up"
-                  delay={Math.min(index * 100, 400)}
                   className="flex flex-col h-full w-full"
                 >
                   <Card
                     hover
-                    className="p-5 sm:p-7 flex flex-col justify-between space-y-5 w-full h-full"
+                    className="group relative p-6 sm:p-7 flex flex-col justify-between space-y-6 w-full h-full rounded-[20px] overflow-hidden"
                   >
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="font-heading text-3xl font-black text-[#4F46E5] dark:text-[#818CF8]">
+                        <span className="font-heading text-4xl font-black text-[#4F46E5] dark:text-[#C084FC] tracking-tighter">
                           {step.step}
                         </span>
-                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#4F46E5]/10 text-[#4F46E5] dark:text-[#818CF8]">
-                          <StepIcon className="h-5 w-5" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[#4F46E5]/10 text-[#4F46E5] dark:bg-[#C084FC]/10 dark:text-[#C084FC] group-hover:scale-105 group-hover:bg-[#4F46E5] group-hover:text-white dark:group-hover:bg-[#C084FC] dark:group-hover:text-[#09090B] transition-all duration-300 shadow-xs">
+                          <StepIcon className="h-6 w-6" />
                         </div>
                       </div>
 
-                      <h3 className="font-heading text-xl font-bold text-[#0A0A0A] dark:text-white">
+                      <h3 className="font-heading text-xl font-bold text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors">
                         {step.title}
                       </h3>
 
@@ -353,10 +363,10 @@ export default function ServicesPage() {
                       </p>
                     </div>
                   </Card>
-                </ScrollReveal>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollRevealContainer>
         </div>
       </section>
 
@@ -382,16 +392,14 @@ export default function ServicesPage() {
       {/* =========================================================================
           FINAL CTA (Creative Designer High Impact)
           ========================================================================= */}
-      <ScrollReveal animation="zoom-in" duration={0.65}>
-        <CTASection
-          variant="card"
-          eyebrow="Start Your Project"
-          title="Ready to Build Your Website or Web Application?"
-          description="Share a few details about your project, goals, and expected timeline. I'll get back to you within 24 hours to schedule a discovery call."
-          primaryButtonText="Get in Touch with Pramod"
-          primaryButtonHref="/contact"
-        />
-      </ScrollReveal>
+      <CTASection
+        variant="card"
+        eyebrow="Start Your Project"
+        title="Ready to Build Your Website or Web Application?"
+        description="Share a few details about your project, goals, and expected timeline. I'll get back to you within 24 hours to schedule a discovery call."
+        primaryButtonText="Get in Touch with pixelCraftStudio"
+        primaryButtonHref="/contact"
+      />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Star, ArrowRight, ExternalLink, Sparkles, Zap, Eye } from "lucide-react";
@@ -13,11 +14,11 @@ export interface ProductCardProps {
  * Standard ProductCard shared across Homepage, Catalog, and Related Products sections.
  * Features Next.js Image optimization, savings pill, hover preview overlay, and WCAG touch targets.
  */
-export function ProductCard({ product }: ProductCardProps) {
+export const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const savings = product.originalPrice ? product.originalPrice - product.price : 0;
 
   return (
-    <Card hover className="group flex flex-col justify-between overflow-hidden h-full">
+    <Card hover className="group flex flex-col justify-between overflow-hidden h-full rounded-[20px] transition-all duration-300">
       <div>
         {/* Thumbnail Image Container with Hover Actions Overlay */}
         <div className="relative aspect-16/10 w-full overflow-hidden bg-[#F4F4F5] dark:bg-[#15151A] border-b border-[#E4E4E7] dark:border-white/[0.08]">
@@ -30,13 +31,13 @@ export function ProductCard({ product }: ProductCardProps) {
           />
 
           {/* Dark Vignette Overlay on Hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
             {product.demoUrl && (
               <a
                 href={product.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-white/95 text-zinc-900 px-4 py-2 text-xs font-bold shadow-lg hover:bg-white hover:scale-105 transition-all"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white text-zinc-900 px-4.5 py-2 text-xs font-bold shadow-lg hover:bg-zinc-100 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Live preview of ${product.title}`}
               >
@@ -46,7 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
             <Link
               href={`/products/${product.slug}`}
-              className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900/90 text-white px-4 py-2 text-xs font-bold shadow-lg hover:bg-black hover:scale-105 transition-all border border-white/20"
+              className="inline-flex items-center gap-1.5 rounded-full bg-zinc-900/90 text-white px-4.5 py-2 text-xs font-bold shadow-lg hover:bg-black hover:scale-105 active:scale-95 transition-all border border-white/20"
               aria-label={`View details of ${product.title}`}
             >
               <span>Details</span>
@@ -57,27 +58,27 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Top Badges */}
           <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
             {product.badge && (
-              <span className="rounded-full bg-[#0A0A0A] text-white dark:bg-gradient-to-r dark:from-[#6366F1] dark:to-[#EC4899] px-3 py-1 text-xs font-bold shadow-md uppercase tracking-wider flex items-center gap-1">
+              <span className="rounded-full bg-[#0A0A0A] text-white dark:bg-gradient-to-r dark:from-[#6366F1] dark:to-[#EC4899] px-3.5 py-1 text-[11px] font-extrabold shadow-md uppercase tracking-wider flex items-center gap-1">
                 <Sparkles className="h-3 w-3" />
                 <span>{product.badge}</span>
               </span>
             )}
             {savings > 0 && (
-              <span className="rounded-full bg-emerald-500 text-white dark:bg-emerald-500/90 px-2.5 py-0.5 text-[11px] font-bold shadow-sm">
+              <span className="rounded-full bg-emerald-500 text-white px-2.5 py-0.5 text-[11px] font-bold shadow-xs">
                 Save ${savings}
               </span>
             )}
           </div>
 
           <div className="absolute top-3.5 right-3.5">
-            <span className="rounded-full bg-white/95 dark:bg-[#15151B]/95 text-[#0A0A0A] dark:text-white px-3 py-1 text-xs font-bold border border-[#E4E4E7] dark:border-white/10 shadow-xs backdrop-blur-md">
+            <span className="rounded-full bg-white/95 dark:bg-[#15151B]/95 text-[#0A0A0A] dark:text-white px-3.5 py-1 text-xs font-bold border border-[#E4E4E7] dark:border-white/10 shadow-xs backdrop-blur-md">
               {product.category}
             </span>
           </div>
         </div>
 
         {/* Card Body */}
-        <CardHeader className="p-4 sm:p-6 space-y-3 pb-3 sm:pb-4">
+        <CardHeader className="p-5 sm:p-7 space-y-3 pb-3 sm:pb-4">
           {/* Rating & Social Proof */}
           <div className="flex items-center gap-2 text-xs text-[#52525B] dark:text-[#A1A1AA]">
             <div className="flex items-center gap-1 text-amber-500 font-bold">
@@ -90,7 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-[#0A0A0A] dark:text-white font-bold">{product.salesCount}+ sold</span>
           </div>
 
-          <CardTitle className="text-xl sm:text-2xl font-bold group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors leading-tight">
+          <CardTitle className="text-xl sm:text-2xl font-black group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors leading-tight">
             <Link href={`/products/${product.slug}`}>
               {product.title}
             </Link>
@@ -102,18 +103,18 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardHeader>
 
         {/* Tech Stack Pills & Guarantee */}
-        <CardContent className="px-4 sm:px-6 pt-0 pb-4 sm:pb-5 space-y-3">
+        <CardContent className="px-5 sm:px-7 pt-0 pb-4 sm:pb-5 space-y-3">
           <div className="flex flex-wrap gap-1.5">
             {product.techStack.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="rounded-full bg-[#FAFAF9] dark:bg-[#181822] border border-[#E4E4E7] dark:border-white/10 px-3 py-1 text-[11px] font-semibold text-[#52525B] dark:text-[#D4D4D8]"
+                className="rounded-full bg-[#F8FAFC] dark:bg-[#181822] border border-[#E4E4E7] dark:border-white/10 px-3 py-1 text-[11px] font-semibold text-[#52525B] dark:text-[#D4D4D8]"
               >
                 {tech}
               </span>
             ))}
             {product.techStack.length > 3 && (
-              <span className="rounded-full bg-[#FAFAF9] dark:bg-[#181822] border border-[#E4E4E7] dark:border-white/10 px-2.5 py-1 text-[11px] font-semibold text-[#71717A] dark:text-[#A1A1AA]">
+              <span className="rounded-full bg-[#F8FAFC] dark:bg-[#181822] border border-[#E4E4E7] dark:border-white/10 px-2.5 py-1 text-[11px] font-semibold text-[#71717A] dark:text-[#A1A1AA]">
                 +{product.techStack.length - 3}
               </span>
             )}
@@ -127,7 +128,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Card Footer */}
-      <CardFooter className="p-4 sm:p-6 pt-4 sm:pt-5 border-t border-[#E4E4E7] dark:border-white/[0.08] flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-white/80 dark:bg-[#0E0E13]/90">
+      <CardFooter className="p-5 sm:p-7 pt-4 sm:pt-5 border-t border-[#E4E4E7] dark:border-white/[0.08] flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-white/80 dark:bg-[#0E0E13]/90">
         <div className="flex items-baseline gap-2">
           <span className="font-heading text-2xl font-black text-[#0A0A0A] dark:text-white">
             ${product.price}
@@ -165,4 +166,5 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardFooter>
     </Card>
   );
-}
+});
+

@@ -1,5 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "pixelCraftStudio | Digital Products, Website Templates & Web Development",
+  description:
+    "Explore production-ready Next.js website templates, Figma UI kits, and full-stack bespoke development services crafted for ambitious founders and creative studios.",
+  alternates: {
+    canonical: "/",
+  },
+};
 import {
   ArrowRight,
   Sparkles,
@@ -16,10 +26,7 @@ import {
   Box,
   MessageSquare,
   ChevronRight,
-  ExternalLink,
-  Quote,
   Clock,
-  ShieldCheck,
   Zap,
 } from "lucide-react";
 import {
@@ -30,80 +37,144 @@ import {
   WHY_CHOOSE_ME,
   TESTIMONIALS,
 } from "@/lib/data";
-import { FaqAccordion } from "@/components/shared/faq-accordion";
-import { FeaturedProductsFilter } from "@/components/shared/featured-products-filter";
+import dynamic from "next/dynamic";
 import { CTASection } from "@/components/shared/cta-section";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { Card } from "@/components/ui/card";
+import {
+  ScrollReveal,
+  ScrollRevealContainer,
+  ScrollRevealItem,
+} from "@/components/ui/ScrollReveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 
+const FeaturedProductsFilter = dynamic(
+  () =>
+    import("@/components/shared/featured-products-filter").then(
+      (mod) => mod.FeaturedProductsFilter
+    ),
+  {
+    loading: () => (
+      <div className="min-h-[420px] flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    ),
+  }
+);
+
+const FaqAccordion = dynamic(
+  () =>
+    import("@/components/shared/faq-accordion").then((mod) => mod.FaqAccordion),
+  {
+    loading: () => (
+      <div className="min-h-[300px] space-y-4 max-w-3xl mx-auto">
+        <div className="h-16 w-full rounded-2xl bg-[#E4E4E7]/40 dark:bg-white/[0.04] animate-pulse" />
+        <div className="h-16 w-full rounded-2xl bg-[#E4E4E7]/40 dark:bg-white/[0.04] animate-pulse" />
+        <div className="h-16 w-full rounded-2xl bg-[#E4E4E7]/40 dark:bg-white/[0.04] animate-pulse" />
+      </div>
+    ),
+  }
+);
+
+const TestimonialsCarousel = dynamic(
+  () =>
+    import("@/components/shared/testimonials-carousel").then(
+      (mod) => mod.TestimonialsCarousel
+    ),
+  {
+    loading: () => (
+      <div className="min-h-[420px] flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    ),
+  }
+);
+
+const serviceIcons = {
+  Palette: Palette,
+  Code: Code2,
+  LayoutDashboard: LayoutDashboard,
+  Layers: Layers,
+  RefreshCw: RefreshCw,
+};
+
+const whyIcons = {
+  Award: Award,
+  Palette: Palette,
+  Cpu: Cpu,
+  Code2: Code2,
+  Box: Box,
+  MessageSquare: MessageSquare,
+};
+
+const productIcons = {
+  Globe: Globe,
+  Atom: Code2,
+  BarChart3: LayoutDashboard,
+  Figma: Layers,
+  Sparkles: Sparkles,
+};
+
 export default function HomePage() {
-  const serviceIcons = {
-    Palette: Palette,
-    Code: Code2,
-    LayoutDashboard: LayoutDashboard,
-    Layers: Layers,
-    RefreshCw: RefreshCw,
-  };
-
-  const whyIcons = {
-    Award: Award,
-    Palette: Palette,
-    Cpu: Cpu,
-    Code2: Code2,
-    Box: Box,
-    MessageSquare: MessageSquare,
-  };
-
-  const productIcons = {
-    Globe: Globe,
-    Atom: Code2,
-    BarChart3: LayoutDashboard,
-    Figma: Layers,
-    Sparkles: Sparkles,
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* =========================================================================
-          1. HERO SECTION (Creative Designer Display Scale & Generous White Space)
+          1. HERO SECTION (Creative Agency Display Scale & Generous White Space)
           ========================================================================= */}
       <section className="relative overflow-hidden pt-20 pb-24 sm:pt-32 sm:pb-36 border-b border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-[#09090B]">
-        {/* Subtle Ambient Vibrant Glows */}
+        {/* Acens-Inspired Background Image Backdrop */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+          <Image
+            src="/images/hero-bg.jpg"
+            alt="PixelCraftStudio creative digital workspace"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center grayscale contrast-115 opacity-25 dark:opacity-60"
+          />
+          {/* Light Mode Overlay for high-contrast text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/92 via-white/80 to-white dark:hidden" />
+          {/* Dark Mode Overlay inspired by Acens data-overlay-dark="6" */}
+          <div className="absolute inset-0 hidden dark:block bg-gradient-to-b from-[#09090B]/75 via-[#09090B]/60 to-[#09090B]" />
+        </div>
+
+        {/* Soft Radial Ambient Glow */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-gradient-to-tr from-[#4F46E5]/15 via-[#7C3AED]/10 to-transparent blur-3xl opacity-70 dark:from-[#6366F1]/20 dark:via-[#A855F7]/15 dark:to-[#EC4899]/15 dark:opacity-60"
+          className="pointer-events-none absolute -top-40 left-1/2 z-0 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#4F46E5]/15 via-[#7C3AED]/10 to-transparent blur-3xl opacity-75 dark:from-[#6366F1]/20 dark:via-[#8B5CF6]/15 dark:to-transparent dark:opacity-70"
         />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center max-w-6xl mx-auto space-y-8 sm:space-y-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center max-w-6xl mx-auto space-y-10 sm:space-y-12">
             {/* Hero Main Content */}
             <ScrollReveal animation="fade-up" delay={0}>
               <div className="flex flex-col items-center text-center space-y-8 sm:space-y-10">
-                {/* Eyebrow Pill */}
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-bold tracking-wider text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
+                {/* Agency Eyebrow Tag */}
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/20 bg-[#4F46E5]/10 px-4 py-1.5 text-xs sm:text-sm font-extrabold tracking-[0.22em] text-[#4F46E5] uppercase shadow-xs dark:border-[#C084FC]/25 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
                   <Sparkles className="h-3.5 w-3.5" />
                   <span>{PROFILE.eyebrow}</span>
                 </div>
 
-                {/* Main Bold Headline with Large Designer Typography */}
-                <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
-                  <span className="block">Beautiful Digital Products.</span>
-                  <span className="block">
-                    <span className="gradient-text">
-                      Websites Built to Perform.
+                <div className="space-y-4">
+                  <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight lg:tracking-tighter text-[#0A0A0A] dark:text-white leading-[1.18] sm:leading-[1.12] lg:leading-[1.10]">
+                    <span className="block">Beautiful Digital Products.</span>
+                    <span className="block">
+                      <span className="gradient-text">
+                        Websites Built to Perform.
+                      </span>
                     </span>
-                  </span>
-                </h1>
+                  </h1>
+                  <div className="agency-heading-bar mx-auto" />
+                </div>
 
                 {/* Subtitle / Bio */}
                 <p className="font-sans text-base sm:text-lg lg:text-xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed sm:leading-[1.7] max-w-2xl sm:max-w-3xl text-balance font-normal">
                   {PROFILE.heroBio}
                 </p>
 
-                {/* Action CTAs */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto pt-4">
+                {/* Dual Pill Action CTAs */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pt-2">
                   <Button
                     href="/products"
                     size="lg"
@@ -125,34 +196,33 @@ export default function HomePage() {
             </ScrollReveal>
 
             {/* Experience & Trust Badges Grid */}
-            <div className="pt-10 sm:pt-16 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 w-full max-w-4xl border-t border-[#E4E4E7] dark:border-white/[0.08]">
+            <ScrollRevealContainer className="pt-10 sm:pt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl border-t border-[#E4E4E7] dark:border-white/[0.08]">
               {[
                 { value: "11+", label: "Years Experience" },
                 { value: "45+", label: "Completed Projects" },
                 { value: "1,200+", label: "Products Sold" },
                 { value: "99%", label: "Client Satisfaction" },
-              ].map((badge, i) => (
-                <ScrollReveal
+              ].map((badge) => (
+                <ScrollRevealItem
                   key={badge.label}
                   animation="fade-up"
-                  delay={Math.min(i * 100, 400)}
                   className="flex flex-col h-full w-full"
                 >
-                  <Card hover className="p-4 sm:p-6 flex flex-col items-center text-center w-full h-full justify-center">
-                    <span className="font-heading text-2xl sm:text-4xl lg:text-5xl font-black text-[#0A0A0A] dark:text-white tracking-tight">
+                  <Card hover className="p-5 sm:p-7 flex flex-col items-center text-center w-full h-full justify-center">
+                    <span className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-[#0A0A0A] dark:text-white tracking-tight">
                       {badge.value}
                     </span>
-                    <span className="text-[11px] sm:text-xs text-[#52525B] dark:text-[#A1A1AA] font-bold uppercase tracking-wider mt-1.5 sm:mt-2">
+                    <span className="text-[11px] sm:text-xs text-[#52525B] dark:text-[#A1A1AA] font-extrabold uppercase tracking-widest mt-2 sm:mt-2.5">
                       {badge.label}
                     </span>
                   </Card>
-                </ScrollReveal>
+                </ScrollRevealItem>
               ))}
-            </div>
+            </ScrollRevealContainer>
 
             {/* Modern Tech Stack Pills */}
             <ScrollReveal animation="fade-up" delay={0.2}>
-              <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 pt-2">
                 {[
                   "React",
                   "Next.js",
@@ -166,7 +236,7 @@ export default function HomePage() {
                 ].map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-full border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#161620] dark:to-[#101015] px-4 py-1.5 text-xs font-semibold text-[#52525B] dark:text-[#A1A1AA] transition-all hover:text-[#0A0A0A] dark:hover:text-white hover:border-[#4F46E5]/40 dark:hover:border-white/30 dark:hover:from-[#1C1C28] dark:hover:to-[#14141C]"
+                    className="rounded-full border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-[#14141C] px-4 py-1.5 text-xs font-semibold text-[#52525B] dark:text-[#A1A1AA] shadow-2xs transition-all duration-200 hover:text-[#0A0A0A] dark:hover:text-white hover:border-[#4F46E5]/40 dark:hover:border-white/30 hover:-translate-y-0.5"
                   >
                     {tech}
                   </span>
@@ -188,20 +258,20 @@ export default function HomePage() {
               <Card className="relative w-full max-w-md p-8 sm:p-10 space-y-7 shadow-lg">
                 <div className="flex items-center gap-4">
                   <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#4F46E5] to-[#7C3AED] font-black text-white text-2xl shadow-lg ring-1 ring-white/20 dark:from-[#6366F1] dark:via-[#8B5CF6] dark:to-[#EC4899]">
-                    <span>PU</span>
+                    <span>PCS</span>
                     <span className="absolute -bottom-1 -right-1 flex h-4 w-4">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                       <span className="relative inline-flex h-4 w-4 rounded-full border-2 border-white dark:border-[#121215] bg-emerald-500" />
                     </span>
                   </div>
                   <div>
-                    <h4 className="font-heading text-xl font-black text-[#0A0A0A] dark:text-white">
-                      Pramod Upadhyay
+                    <h4 className="font-heading text-xl font-black text-[#0A0A0A] dark:text-white leading-tight">
+                      pixelCraft
+                      <span className="block text-xs font-black tracking-[0.25em] text-[#4F46E5] dark:text-[#818CF8] uppercase mt-0.5">
+                        STUDIO
+                      </span>
                     </h4>
-                    <p className="text-sm font-bold text-[#4F46E5] dark:text-[#C084FC]">
-                      Full Stack Developer & UI Designer
-                    </p>
-                    <p className="text-xs font-semibold text-[#52525B] dark:text-[#A1A1AA]">
+                    <p className="text-xs font-semibold text-[#52525B] dark:text-[#A1A1AA] mt-1">
                       11+ Years Experience · Available
                     </p>
                   </div>
@@ -239,9 +309,12 @@ export default function HomePage() {
                 <span>About Me</span>
               </div>
 
-              <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
-                Hi, I’m Pramod. I Design, Build, and Create for the Web.
-              </h2>
+              <div className="space-y-3.5">
+                <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
+                  Welcome to pixelCraftStudio. We Design, Build, and Create for the Web.
+                </h2>
+                <div className="agency-heading-bar ml-0 mr-auto" />
+              </div>
 
               <div className="space-y-5 text-base sm:text-lg text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
                 <p>{PROFILE.aboutBio[0]}</p>
@@ -300,54 +373,58 @@ export default function HomePage() {
             </SectionHeading>
           </ScrollReveal>
 
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Services Grid with Single Observer */}
+          <ScrollRevealContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {SERVICES.map((service, index) => {
               const IconComponent =
                 serviceIcons[service.iconName as keyof typeof serviceIcons] || Code2;
+              const stepNumber = String(index + 1).padStart(2, "0");
 
               return (
-                <ScrollReveal
+                <ScrollRevealItem
                   key={service.id}
                   animation="fade-up"
-                  delay={Math.min(index * 100, 400)}
                   className="flex flex-col h-full w-full"
                 >
                   <Card
                     hover
-                    className={`group relative flex flex-col justify-between p-6 sm:p-8 lg:p-10 transition-all duration-300 w-full ${
+                    className={`group relative flex flex-col justify-between p-7 sm:p-9 lg:p-10 transition-all duration-300 w-full h-full ${
                       service.popular
-                        ? "ring-2 ring-[#4F46E5]/30 dark:ring-[#C084FC]/40 shadow-xl dark:shadow-[0_20px_50px_-10px_rgba(139,92,246,0.25)]"
+                        ? "ring-2 ring-[#4F46E5]/40 dark:ring-[#C084FC]/40 shadow-xl shadow-indigo-500/10 dark:shadow-[0_20px_50px_-10px_rgba(139,92,246,0.3)]"
                         : ""
                     }`}
                   >
                     <div className="space-y-6">
-                      {/* Header Row: Icon, Turnaround & Badge */}
+                      {/* Header Row: Icon, Watermark Number & Popular Badge */}
                       <div className="flex items-center justify-between gap-3">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-tr from-[#4F46E5]/10 via-[#7C3AED]/10 to-transparent dark:from-[#6366F1]/20 dark:via-[#8B5CF6]/15 dark:to-[#EC4899]/10 text-[#4F46E5] dark:text-[#C084FC] border border-[#4F46E5]/20 dark:border-white/10 shadow-xs group-hover:scale-105 group-hover:shadow-md group-hover:shadow-indigo-500/20 group-hover:border-[#4F46E5]/40 transition-all duration-300">
-                          <IconComponent className="h-7 w-7" />
+                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#4F46E5]/10 via-[#7C3AED]/10 to-transparent dark:from-[#6366F1]/20 dark:via-[#8B5CF6]/15 dark:to-[#EC4899]/10 text-[#4F46E5] dark:text-[#C084FC] border border-[#4F46E5]/20 dark:border-white/10 shadow-xs group-hover:scale-105 group-hover:shadow-md group-hover:shadow-indigo-500/20 group-hover:border-[#4F46E5]/40 transition-all duration-300">
+                          <IconComponent className="h-8 w-8" />
                         </div>
 
-                        {service.popular ? (
-                          <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#4F46E5]/15 to-[#7C3AED]/15 dark:from-[#6366F1]/25 dark:to-[#EC4899]/25 border border-[#4F46E5]/30 dark:border-[#C084FC]/40 px-3.5 py-1 text-xs font-bold text-[#4F46E5] dark:text-[#C084FC] uppercase tracking-wider shadow-xs">
-                            <Sparkles className="h-3 w-3 animate-pulse" />
-                            <span>Popular Choice</span>
-                          </div>
-                        ) : (
-                          <span className="text-[11px] font-semibold text-[#71717A] dark:text-[#A1A1AA] uppercase tracking-wider">
-                            Custom Scope
+                        <div className="flex items-center gap-3">
+                          {service.popular ? (
+                            <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#4F46E5]/15 to-[#7C3AED]/15 dark:from-[#6366F1]/25 dark:to-[#EC4899]/25 border border-[#4F46E5]/30 dark:border-[#C084FC]/40 px-3.5 py-1 text-xs font-bold text-[#4F46E5] dark:text-[#C084FC] uppercase tracking-wider shadow-xs">
+                              <Sparkles className="h-3 w-3 animate-pulse" />
+                              <span>Popular</span>
+                            </div>
+                          ) : null}
+                          <span className="font-heading text-3xl sm:text-4xl font-black text-zinc-200 dark:text-zinc-800/80 group-hover:text-[#4F46E5]/35 dark:group-hover:text-[#C084FC]/35 transition-colors select-none">
+                            {stepNumber}
                           </span>
-                        )}
+                        </div>
                       </div>
 
-                      {/* Timeline Indicator */}
-                      <div className="inline-flex items-center gap-1.5 rounded-full bg-[#FAFAF9] dark:bg-[#161620] border border-[#E4E4E7] dark:border-white/10 px-3 py-1 text-xs font-semibold text-[#52525B] dark:text-[#A1A1AA]">
-                        <Clock className="h-3.5 w-3.5 text-[#4F46E5] dark:text-[#C084FC]" />
-                        <span>Turnaround: {service.timeline}</span>
+                      {/* Timeline Pill */}
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-[#F8FAFC] dark:bg-[#161620] border border-[#E4E4E7] dark:border-white/10 px-3.5 py-1 text-xs font-semibold text-[#52525B] dark:text-[#A1A1AA]">
+                          <Clock className="h-3.5 w-3.5 text-[#4F46E5] dark:text-[#C084FC]" />
+                          <span>Turnaround: {service.timeline}</span>
+                        </div>
                       </div>
 
-                      <div className="space-y-2.5">
-                        <h3 className="font-heading text-2xl font-bold text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors">
+                      {/* Title & Description */}
+                      <div className="space-y-3">
+                        <h3 className="font-heading text-2xl font-black tracking-tight text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors">
                           {service.title}
                         </h3>
 
@@ -356,8 +433,9 @@ export default function HomePage() {
                         </p>
                       </div>
 
+                      {/* Deliverables List */}
                       <div className="pt-4 space-y-3 border-t border-[#E4E4E7] dark:border-white/[0.08]">
-                        <span className="text-[11px] font-bold text-[#0A0A0A] dark:text-white uppercase tracking-wider block">
+                        <span className="text-[11px] font-extrabold text-[#0A0A0A] dark:text-white uppercase tracking-wider block">
                           Included Deliverables
                         </span>
                         {service.deliverables.map((item, i) => (
@@ -369,22 +447,23 @@ export default function HomePage() {
                       </div>
                     </div>
 
+                    {/* Bottom Action Pill */}
                     <div className="pt-6 mt-8 border-t border-[#E4E4E7] dark:border-white/[0.08]">
                       <Button
                         href={service.ctaHref}
                         variant={service.popular ? "default" : "secondary"}
                         size="sm"
                         className="w-full justify-between font-bold"
-                        rightIcon={<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />}
+                        rightIcon={<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1.5" />}
                       >
                         {service.ctaText}
                       </Button>
                     </div>
                   </Card>
-                </ScrollReveal>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollRevealContainer>
 
           {/* Bottom Prompt */}
           <ScrollReveal animation="fade-up" delay={0.2} className="mt-16 text-center">
@@ -438,7 +517,7 @@ export default function HomePage() {
           {/* 5 Product Categories Showcase */}
           <div>
             <ScrollReveal animation="fade-up" className="text-center sm:text-left mb-10 space-y-2">
-              <span className="text-xs font-bold tracking-widest text-[#4F46E5] dark:text-[#C084FC] uppercase">
+              <span className="agency-eyebrow">
                 Catalog Navigation
               </span>
               <h3 className="font-heading text-2xl sm:text-4xl font-black text-[#0A0A0A] dark:text-white">
@@ -449,33 +528,40 @@ export default function HomePage() {
               </p>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <ScrollRevealContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {PRODUCT_CATEGORIES.map((cat, index) => {
                 const IconComp =
                   productIcons[cat.iconName as keyof typeof productIcons] || Box;
 
                 return (
-                  <ScrollReveal
+                  <ScrollRevealItem
                     key={cat.id}
                     animation="fade-up"
-                    delay={Math.min(index * 100, 400)}
                     className="flex flex-col h-full w-full"
                   >
                     <Card
                       hover
-                      className="group flex flex-col justify-between p-6 sm:p-8 w-full h-full"
+                      className="group relative flex flex-col justify-between p-7 sm:p-9 w-full h-full rounded-[20px] overflow-hidden"
                     >
-                      <div className="space-y-5">
+                      {/* Watermark Number */}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute top-4 right-6 font-heading text-5xl font-black tracking-tighter text-black/[0.04] dark:text-white/[0.05] select-none transition-transform duration-500 group-hover:scale-110"
+                      >
+                        0{index + 1}
+                      </span>
+
+                      <div className="space-y-6">
                         <div className="flex items-center justify-between">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-[#4F46E5]/10 text-[#4F46E5] dark:bg-[#C084FC]/10 dark:text-[#C084FC] group-hover:scale-105 group-hover:bg-[#4F46E5] group-hover:text-white dark:group-hover:bg-[#C084FC] dark:group-hover:text-[#09090B] transition-all duration-300 shadow-xs">
-                            <IconComp className="h-7 w-7" />
+                          <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#4F46E5]/10 text-[#4F46E5] dark:bg-[#C084FC]/10 dark:text-[#C084FC] group-hover:scale-105 group-hover:bg-[#4F46E5] group-hover:text-white dark:group-hover:bg-[#C084FC] dark:group-hover:text-[#09090B] transition-all duration-300 shadow-xs">
+                            <IconComp className="h-8 w-8" />
                           </div>
-                          <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#FAFAF9] dark:bg-[#181822] text-[#52525B] dark:text-[#D4D4D8] border border-[#E4E4E7] dark:border-white/10">
+                          <span className="text-xs font-bold px-3.5 py-1.5 rounded-full bg-[#FAFAF9] dark:bg-[#181822] text-[#52525B] dark:text-[#D4D4D8] border border-[#E4E4E7] dark:border-white/10">
                             {cat.count}+ Resources
                           </span>
                         </div>
 
-                        <h4 className="font-heading text-xl font-bold text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors">
+                        <h4 className="font-heading text-xl sm:text-2xl font-bold text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors">
                           {cat.title}
                         </h4>
 
@@ -489,17 +575,17 @@ export default function HomePage() {
                           href={`/products?cat=${cat.id}`}
                           variant="secondary"
                           size="sm"
-                          className="w-full justify-between font-bold group-hover:bg-[#4F46E5] group-hover:text-white dark:group-hover:bg-[#C084FC] dark:group-hover:text-[#09090B] transition-all"
+                          className="w-full justify-between font-bold rounded-full px-5 group-hover:bg-[#4F46E5] group-hover:text-white dark:group-hover:bg-[#C084FC] dark:group-hover:text-[#09090B] transition-all"
                           rightIcon={<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />}
                         >
                           {cat.ctaText}
                         </Button>
                       </div>
                     </Card>
-                  </ScrollReveal>
+                  </ScrollRevealItem>
                 );
               })}
-            </div>
+            </ScrollRevealContainer>
           </div>
 
           {/* Closing Banner */}
@@ -543,44 +629,60 @@ export default function HomePage() {
             />
           </ScrollReveal>
 
-          {/* 6 Value Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+          {/* 6 Value Pillars with Single Observer */}
+          <ScrollRevealContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {WHY_CHOOSE_ME.map((item, index) => {
               const IconC =
                 whyIcons[item.iconName as keyof typeof whyIcons] || Award;
 
               return (
-                <ScrollReveal
+                <ScrollRevealItem
                   key={item.title}
                   animation="fade-up"
-                  delay={Math.min(index * 100, 400)}
                   className="flex flex-col h-full w-full"
                 >
                   <Card
                     hover
-                    className="p-6 sm:p-8 lg:p-10 space-y-5 w-full h-full"
+                    className="group relative flex flex-col justify-between p-7 sm:p-9 lg:p-10 w-full h-full rounded-[20px] overflow-hidden"
                   >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#4F46E5]/10 text-[#4F46E5] dark:bg-[#C084FC]/10 dark:text-[#C084FC] shadow-xs">
-                      <IconC className="h-7 w-7" />
+                    {/* Watermark Number */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute top-4 right-6 font-heading text-5xl font-black tracking-tighter text-black/[0.04] dark:text-white/[0.05] select-none transition-transform duration-500 group-hover:scale-110"
+                    >
+                      0{index + 1}
+                    </span>
+
+                    <div className="space-y-6">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#4F46E5]/10 text-[#4F46E5] dark:bg-[#C084FC]/10 dark:text-[#C084FC] group-hover:scale-105 group-hover:bg-[#4F46E5] group-hover:text-white dark:group-hover:bg-[#C084FC] dark:group-hover:text-[#09090B] transition-all duration-300 shadow-xs">
+                        <IconC className="h-8 w-8" />
+                      </div>
+
+                      <h3 className="font-heading text-xl sm:text-2xl font-bold text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-sm text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
+                        {item.description}
+                      </p>
                     </div>
-                    <h3 className="font-heading text-xl font-bold text-[#0A0A0A] dark:text-white">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-[#52525B] dark:text-[#A1A1AA] leading-relaxed">
-                      {item.description}
-                    </p>
+
+                    <div className="pt-6 mt-6 border-t border-[#E4E4E7]/60 dark:border-white/[0.06] flex items-center gap-2 text-xs font-bold text-[#71717A] dark:text-[#A1A1AA]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#4F46E5] dark:bg-[#C084FC]" />
+                      <span>Standard of Excellence</span>
+                    </div>
                   </Card>
-                </ScrollReveal>
+                </ScrollRevealItem>
               );
             })}
-          </div>
+          </ScrollRevealContainer>
 
           {/* Closing CTA */}
           <ScrollReveal animation="fade-up" delay={0.2} className="text-center">
             <Button
               href="/contact"
               size="lg"
-              className="rounded-full px-9 py-6 text-base font-bold shadow-md shadow-indigo-500/25"
+              className="rounded-full px-9 py-5 text-base font-bold shadow-md shadow-indigo-500/25"
               rightIcon={<ArrowRight className="h-4 w-4" />}
             >
               Have a Project in Mind? Let&apos;s Talk.
@@ -603,62 +705,10 @@ export default function HomePage() {
             />
           </ScrollReveal>
 
-          {/* Testimonial Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
-            {TESTIMONIALS.map((t, index) => (
-              <ScrollReveal
-                key={t.id}
-                animation="fade-up"
-                delay={Math.min(index * 100, 400)}
-                className="flex flex-col h-full w-full"
-              >
-                <Card
-                  hover
-                  className="relative flex flex-col justify-between overflow-hidden p-6 sm:p-8 lg:p-10 w-full h-full"
-                >
-                  {/* Decorative Quote Mark */}
-                  <Quote className="absolute right-6 top-6 h-16 w-16 text-[#4F46E5]/5 dark:text-[#C084FC]/10 pointer-events-none -rotate-12" />
-
-                  <div className="space-y-5 relative z-10">
-                    {/* Star Rating */}
-                    <div className="flex items-center gap-1.5 text-amber-500">
-                      {[...Array(t.rating)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-amber-500 text-amber-500" />
-                      ))}
-                      <span className="text-xs font-bold text-[#0A0A0A] dark:text-white ml-1">5.0</span>
-                    </div>
-
-                    <p className="text-sm sm:text-base text-[#0A0A0A]/90 dark:text-white/90 leading-relaxed italic">
-                      &ldquo;{t.content}&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-4 pt-6 mt-8 border-t border-[#E4E4E7] dark:border-white/[0.08] relative z-10">
-                    <div className="relative h-13 w-13 rounded-full overflow-hidden border-2 border-[#4F46E5]/30 dark:border-white/20 bg-[#F4F4F5] dark:bg-[#181822] shadow-xs shrink-0">
-                      <Image
-                        src={t.avatar}
-                        alt={t.name}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="font-heading text-sm font-bold text-[#0A0A0A] dark:text-white truncate">
-                        {t.name}
-                      </h4>
-                      <p className="text-xs text-[#52525B] dark:text-[#A1A1AA] truncate font-medium">
-                        {t.role}, {t.company}
-                      </p>
-                      <span className="inline-block mt-1 rounded-full bg-[#4F46E5]/10 border border-[#4F46E5]/20 px-2.5 py-0.5 text-[10px] font-bold text-[#4F46E5] dark:text-[#C084FC]">
-                        {t.projectType}
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              </ScrollReveal>
-            ))}
-          </div>
+          {/* Testimonial Cards Carousel */}
+          <ScrollReveal animation="fade-up" delay={0.1} className="mb-14">
+            <TestimonialsCarousel testimonials={TESTIMONIALS} />
+          </ScrollReveal>
 
           {/* Feedback Prompt */}
           <ScrollReveal animation="fade-up" delay={0.2} className="text-center text-sm text-[#52525B] dark:text-[#A1A1AA] font-medium">
@@ -708,17 +758,15 @@ export default function HomePage() {
       {/* =========================================================================
           8. FINAL CALL-TO-ACTION SECTION (Large Designer Display Banner)
           ========================================================================= */}
-      <ScrollReveal animation="zoom-in" duration={0.65}>
-        <CTASection
-          eyebrow="Ready to Begin?"
-          title="Have an Idea? Let's Bring It to Life."
-          description="Whether you’re looking for a ready-made digital product or need a custom website, I’m here to help you take the next step."
-          primaryButtonText="Start a Project"
-          primaryButtonHref="/contact"
-          secondaryButtonText="Explore Products"
-          secondaryButtonHref="/products"
-        />
-      </ScrollReveal>
+      <CTASection
+        eyebrow="Ready to Begin?"
+        title="Have an Idea? Let's Bring It to Life."
+        description="Whether you’re looking for a ready-made digital product or need a custom website, I’m here to help you take the next step."
+        primaryButtonText="Start a Project"
+        primaryButtonHref="/contact"
+        secondaryButtonText="Explore Products"
+        secondaryButtonHref="/products"
+      />
     </div>
   );
 }

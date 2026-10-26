@@ -40,6 +40,7 @@ export function Navbar({ className = "" }: NavbarProps) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 15);
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -53,47 +54,61 @@ export function Navbar({ className = "" }: NavbarProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Lock body scroll while mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "border-b border-[#E4E4E7] bg-white/90 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.03)] dark:border-white/[0.08] dark:bg-[#09090B]/90 dark:shadow-[0_4px_30px_rgba(0,0,0,0.8),inset_0_-1px_0_0_rgba(255,255,255,0.05)]"
-          : "border-b border-transparent bg-white/75 backdrop-blur-md dark:bg-[#09090B]/75"
+          ? "border-b border-white/[0.08] bg-[#09090B]/95 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.7),inset_0_-1px_0_0_rgba(255,255,255,0.05)]"
+          : "border-b border-transparent bg-[#09090B]/80 backdrop-blur-md"
       } ${className}`}
     >
-      <Container className="flex h-16 sm:h-20 items-center justify-between">
+      <Container className={`flex items-center justify-between transition-all duration-300 ${
+        scrolled ? "h-16 sm:h-18" : "h-16 sm:h-20"
+      }`}>
         {/* Brand Logo & Identity */}
         <Link
           href="/"
           className="group flex items-center gap-2.5 sm:gap-3.5 transition-transform duration-200 active:scale-95 min-w-0"
-          aria-label="Pramod Upadhyay - Home"
+          aria-label="pixelCraftStudio - Home"
         >
-          <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#4F46E5] to-[#7C3AED] font-black text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20 transition-all duration-300 group-hover:scale-105 dark:from-[#6366F1] dark:via-[#8B5CF6] dark:to-[#EC4899]">
-            <span className="font-heading text-sm sm:text-base font-black tracking-wider">PU</span>
+          <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#6366F1] via-[#8B5CF6] to-[#EC4899] font-black text-white shadow-md shadow-indigo-500/25 ring-1 ring-white/20 transition-all duration-300 group-hover:scale-105">
+            <span className="font-heading text-sm sm:text-base font-black tracking-wider">PCS</span>
             <span
               className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5"
               title="Available for projects"
             >
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-white dark:border-[#09090B] bg-emerald-500" />
+              <span className="relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-[#09090B] bg-emerald-500" />
             </span>
           </div>
 
-          <div className="flex flex-col min-w-0">
-            <span className="font-heading text-base sm:text-lg font-black tracking-tight text-[#0A0A0A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#C084FC] transition-colors truncate">
-              Pramod Upadhyay
+          <div className="flex flex-col min-w-0 leading-tight">
+            <span className="font-heading text-base sm:text-lg font-black tracking-tight text-white group-hover:text-[#C084FC] transition-colors truncate">
+              pixelCraft
             </span>
-            <span className="text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase text-[#52525B] dark:text-[#A1A1AA] -mt-0.5 hidden xs:inline truncate">
-              Design & Development
+            <span className="text-[10px] sm:text-[11px] font-black tracking-[0.25em] uppercase text-[#818CF8] -mt-0.5 truncate">
+              STUDIO
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation Links Pill */}
         <nav
-          className="hidden md:flex items-center gap-1.5 rounded-full border border-[#E4E4E7] bg-white/95 p-1.5 backdrop-blur-md shadow-[0_1px_3px_rgba(0,0,0,0.04),inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:border-white/[0.08] dark:bg-gradient-to-b dark:from-[#171720]/90 dark:to-[#0F0F14]/90 dark:shadow-[0_8px_24px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+          className="hidden md:flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-gradient-to-b from-[#171720]/90 to-[#0F0F14]/90 p-1.5 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)]"
           aria-label="Primary Navigation"
         >
           {NAV_ITEMS.map((item) => {
@@ -108,8 +123,8 @@ export function Navbar({ className = "" }: NavbarProps) {
                 href={item.href}
                 className={`relative px-4 py-2 text-xs lg:text-sm font-semibold transition-all duration-200 rounded-full select-none ${
                   isActive
-                    ? "bg-[#0A0A0A] text-white shadow-xs dark:bg-gradient-to-r dark:from-[#6366F1] dark:to-[#A855F7] dark:text-white dark:shadow-[0_0_20px_rgba(139,92,246,0.45),inset_0_1px_0_0_rgba(255,255,255,0.25)]"
-                    : "text-[#52525B] hover:text-[#0A0A0A] hover:bg-[#F4F4F6] dark:text-[#A1A1AA] dark:hover:text-white dark:hover:bg-white/10"
+                    ? "bg-gradient-to-r from-[#6366F1] to-[#A855F7] text-white shadow-[0_0_20px_rgba(139,92,246,0.45),inset_0_1px_0_0_rgba(255,255,255,0.25)]"
+                    : "text-[#A1A1AA] hover:text-white hover:bg-white/10"
                 }`}
               >
                 {item.name}
@@ -121,7 +136,7 @@ export function Navbar({ className = "" }: NavbarProps) {
         {/* Right CTA & Controls */}
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           {/* Status badge */}
-          <div className="hidden xl:flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+          <div className="hidden xl:flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span>Available for Q2 Projects</span>
           </div>
@@ -143,7 +158,7 @@ export function Navbar({ className = "" }: NavbarProps) {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
-            className="md:hidden flex h-11 w-11 items-center justify-center rounded-full border border-[#E4E4E7] dark:border-white/10 bg-white dark:bg-gradient-to-b dark:from-[#181822] dark:to-[#121218] text-foreground transition-all hover:bg-[#F3F3F5] dark:hover:from-[#20202E] dark:hover:to-[#161620] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 touch-manipulation"
+            className="md:hidden flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-gradient-to-b from-[#181822] to-[#121218] text-white transition-all hover:from-[#20202E] hover:to-[#161620] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 touch-manipulation"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -152,7 +167,7 @@ export function Navbar({ className = "" }: NavbarProps) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-[#E4E4E7] bg-white/95 px-4 pt-3 pb-6 backdrop-blur-2xl shadow-xl dark:border-white/[0.08] dark:bg-gradient-to-b dark:from-[#111116]/98 dark:to-[#0A0A0E]/98 space-y-4 animate-in slide-in-from-top-4 duration-200 max-h-[calc(100vh-4.5rem)] overflow-y-auto">
+        <div className="md:hidden border-b border-white/[0.08] bg-gradient-to-b from-[#111116]/98 to-[#0A0A0E]/98 px-4 pt-3 pb-6 backdrop-blur-2xl shadow-xl space-y-4 animate-in slide-in-from-top-4 duration-200 max-h-[calc(100vh-4.5rem)] overflow-y-auto">
           <div className="grid grid-cols-2 gap-2 pt-1">
             {NAV_ITEMS.map((item) => {
               const IconC = item.icon;
@@ -168,8 +183,8 @@ export function Navbar({ className = "" }: NavbarProps) {
                   onClick={closeMobileMenu}
                   className={`flex items-center gap-2.5 rounded-xl px-3.5 py-3 text-xs sm:text-sm font-bold transition-all min-w-0 ${
                     isActive
-                      ? "bg-[#0A0A0A] text-white dark:bg-gradient-to-r dark:from-[#6366F1] dark:to-[#A855F7] dark:text-white dark:shadow-[0_0_20px_rgba(139,92,246,0.35)]"
-                      : "text-[#52525B] hover:bg-[#F4F4F6] hover:text-[#0A0A0A] dark:text-[#A1A1AA] dark:hover:bg-white/[0.06] dark:hover:text-white"
+                      ? "bg-gradient-to-r from-[#6366F1] to-[#A855F7] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)]"
+                      : "text-[#A1A1AA] hover:bg-white/[0.06] hover:text-white"
                   }`}
                 >
                   <IconC className="h-4 w-4 shrink-0" />
@@ -179,8 +194,8 @@ export function Navbar({ className = "" }: NavbarProps) {
             })}
           </div>
 
-          <div className="pt-3 border-t border-[#E4E4E7] dark:border-white/[0.08] flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-3">
-            <div className="flex items-center justify-center xs:justify-start gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+          <div className="pt-3 border-t border-white/[0.08] flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-3">
+            <div className="flex items-center justify-center xs:justify-start gap-2 text-xs font-semibold text-emerald-400">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Available for Hire</span>
             </div>

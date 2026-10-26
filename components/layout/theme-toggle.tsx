@@ -52,7 +52,7 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
   if (!isClient) {
     return (
       <div
-        className={`w-9 h-9 rounded-full border border-border/50 bg-secondary/50 ${className}`}
+        className={`w-9 h-9 rounded-full border border-white/10 bg-[#181822] ${className}`}
         aria-hidden="true"
       />
     );
@@ -63,12 +63,12 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
       type="button"
       onClick={toggleTheme}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className={`relative flex items-center justify-center w-9 h-9 rounded-full border border-border/60 bg-background/80 hover:bg-muted text-foreground transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-white/10 dark:bg-gradient-to-b dark:from-[#181822] dark:to-[#121218] dark:hover:from-[#20202E] dark:hover:to-[#161620] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] ${className}`}
+      className={`relative flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-gradient-to-b from-[#181822] to-[#121218] hover:from-[#20202E] hover:to-[#161620] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] text-white transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${className}`}
     >
       {isDark ? (
         <Sun className="w-4 h-4 text-amber-400 transition-transform duration-300" />
       ) : (
-        <Moon className="w-4 h-4 text-[#0A0A0A] transition-transform duration-300" />
+        <Moon className="w-4 h-4 text-zinc-300 hover:text-white transition-transform duration-300" />
       )}
     </button>
   );

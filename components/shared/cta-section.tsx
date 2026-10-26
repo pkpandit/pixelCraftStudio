@@ -1,6 +1,7 @@
-import { Sparkles, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 
 export interface CTASectionProps {
@@ -17,7 +18,8 @@ export interface CTASectionProps {
 
 /**
  * Reusable high-impact Call To Action (CTA) section.
- * Eliminates duplicate banner code across Home, About, and Services pages.
+ * Replicates the Acens panoramic video/banner design style with monochrome agency backdrop,
+ * cursive accent eyebrow, bold headline, and centered circular play/action element.
  */
 export function CTASection({
   eyebrow = "Ready to Begin?",
@@ -27,81 +29,91 @@ export function CTASection({
   primaryButtonHref = "/contact",
   secondaryButtonText,
   secondaryButtonHref,
-  variant = "default",
   className = "",
 }: CTASectionProps) {
-  const content = (
-    <div className="space-y-8 sm:space-y-10 text-center">
-      {eyebrow && (
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#4F46E5]/25 bg-[#4F46E5]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#4F46E5] uppercase dark:border-[#C084FC]/30 dark:bg-[#C084FC]/10 dark:text-[#C084FC]">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>{eyebrow}</span>
-        </div>
-      )}
-
-      <h2 className="font-heading text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight text-[#0A0A0A] dark:text-white text-balance leading-tight">
-        {title}
-      </h2>
-
-      <p className="text-base sm:text-xl lg:text-2xl text-[#52525B] dark:text-[#A1A1AA] leading-relaxed max-w-2xl mx-auto text-balance font-normal">
-        {description}
-      </p>
-
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-4">
-        {primaryButtonText && primaryButtonHref && (
-          <Button
-            href={primaryButtonHref}
-            size="lg"
-            className="w-full sm:w-auto px-10 py-6 text-base font-bold shadow-lg shadow-indigo-500/25"
-            rightIcon={<ArrowRight className="h-4 w-4" />}
-          >
-            {primaryButtonText}
-          </Button>
-        )}
-        {secondaryButtonText && secondaryButtonHref && (
-          <Button
-            href={secondaryButtonHref}
-            variant="outline"
-            size="lg"
-            className="w-full sm:w-auto px-10 py-6 text-base font-bold"
-          >
-            {secondaryButtonText}
-          </Button>
-        )}
-      </div>
-    </div>
-  );
-
-  if (variant === "card") {
-    return (
-      <section className={`py-20 sm:py-28 text-center bg-white dark:bg-[#09090B] relative overflow-hidden ${className}`}>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-60 dark:opacity-40"
-        >
-          <div className="h-[460px] w-[800px] rounded-full bg-gradient-to-tr from-[#4F46E5]/15 via-[#7C3AED]/10 to-transparent blur-3xl" />
-        </div>
-
-        <Container>
-          <Card className="mx-auto max-w-4xl p-6 sm:p-10 md:p-16 shadow-xl border-[#E4E4E7] dark:border-white/[0.08] bg-white dark:bg-gradient-to-b dark:from-[#171720] dark:to-[#0F0F14]">
-            {content}
-          </Card>
-        </Container>
-      </section>
-    );
-  }
-
   return (
-    <section className={`relative overflow-hidden py-24 sm:py-36 bg-[#F8FAFC] dark:bg-[#09090B] border-t border-[#E4E4E7] dark:border-white/[0.08] ${className}`}>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-40 dark:opacity-30"
-      >
-        <div className="h-[500px] w-[900px] rounded-full bg-gradient-to-tr from-[#4F46E5]/20 via-[#A855F7]/15 to-[#EC4899]/20 blur-3xl" />
+    <section
+      className={`relative overflow-hidden py-24 sm:py-32 lg:py-36 border-t border-b border-white/[0.08] bg-[#09090B] text-white ${className}`}
+    >
+      {/* Acens-Inspired Panoramic Agency Team Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+        <Image
+          src="/images/cta-team-banner.jpg"
+          alt="PixelCraftStudio creative agency team workspace"
+          fill
+          loading="lazy"
+          quality={80}
+          sizes="100vw"
+          className="object-cover object-center grayscale contrast-125 brightness-95 opacity-70 dark:opacity-65"
+        />
+        {/* Dark Cinematic Vignette Overlays matching reference image */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#09090B] via-black/20 to-[#09090B]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.65)_100%)]" />
       </div>
 
-      <Container className="max-w-4xl">
-        {content}
+      <Container className="relative z-10 max-w-5xl">
+        <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8">
+          {/* Cursive / Script Accent Eyebrow matching 'Our Agency Video' from reference */}
+          {eyebrow && (
+            <div className="inline-flex items-center gap-2">
+              <span className="font-serif italic text-base sm:text-lg lg:text-xl font-normal text-[#C084FC] tracking-wide drop-shadow-sm">
+                {eyebrow}
+              </span>
+            </div>
+          )}
+
+          {/* Bold White Headline */}
+          <div className="space-y-3">
+            <h2 className="font-heading text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight text-white text-balance leading-tight drop-shadow-md">
+              {title}
+            </h2>
+          </div>
+
+          {/* Centered Circular Action Element matching reference circular play button */}
+          <div className="pt-1 pb-1">
+            <Link
+              href={primaryButtonHref}
+              aria-label={`${primaryButtonText} - ${title}`}
+              className="group relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/35 bg-white/5 backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-white hover:bg-white/15 hover:shadow-[0_0_35px_rgba(192,132,252,0.45)] active:scale-95"
+            >
+              {/* Subtle ambient ripple ring */}
+              <span className="absolute inset-0 rounded-full border border-[#C084FC]/40 animate-ping opacity-25" />
+              
+              {/* Play triangle in accent brand color */}
+              <Play className="h-6 w-6 sm:h-7 sm:w-7 text-[#C084FC] fill-[#C084FC]/30 group-hover:fill-[#C084FC] transition-all ml-0.5" />
+            </Link>
+          </div>
+
+          {/* Description */}
+          <p className="text-base sm:text-lg lg:text-xl text-zinc-300 leading-relaxed max-w-2xl mx-auto text-balance font-normal">
+            {description}
+          </p>
+
+          {/* Dual Pill Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-2 w-full sm:w-auto">
+            {primaryButtonText && primaryButtonHref && (
+              <Button
+                href={primaryButtonHref}
+                size="lg"
+                className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold shadow-lg shadow-indigo-500/25"
+                rightIcon={<ArrowRight className="h-4 w-4 ml-1" />}
+              >
+                {primaryButtonText}
+              </Button>
+            )}
+            {secondaryButtonText && secondaryButtonHref && (
+              <Button
+                href={secondaryButtonHref}
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto rounded-full px-9 py-6 text-base font-bold border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 shadow-xs"
+              >
+                {secondaryButtonText}
+              </Button>
+            )}
+          </div>
+        </div>
       </Container>
     </section>
   );
